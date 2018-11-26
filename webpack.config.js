@@ -35,11 +35,7 @@ module.exports = {
       { from: 'plugin.json', to: '.' },
       { from: '../README.md', to: '.' },
       { from: '../LICENSE', to: '.' },
-      { from: 'partials/*', to: '.' },
       { from: 'img/*', to: '.' },
-      { from: 'dashboards/*', to: '.' },
-      { from: 'external/*', to: '.' },
-      { from: 'components/*', to: '.' },
     ]),
   ],
   resolve: {

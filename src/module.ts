@@ -1,12 +1,10 @@
-import {StreamPageCtrl} from './components/stream';
-import {ExampleAppConfigCtrl} from './components/config';
+import {ExampleAppDatasource} from  './datasource';
 
-import {PanelCtrl} from './panel/module';
-import {ExampleAppDatasource} from './datasource/module';
+class ExampleAppConfigCtrl {
+    template = '<datasource-http-settings current="ctrl.current"></datasource-http-settings>';
+}
 
 export {
-  ExampleAppConfigCtrl as ConfigCtrl,
-  StreamPageCtrl, //Matches pages.component in plugin.json
-  PanelCtrl,
-  ExampleAppDatasource as DatasourceCtrl,
+  ExampleAppDatasource,
+  ExampleAppConfigCtrl as ConfigCtrl
 };
