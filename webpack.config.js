@@ -37,6 +37,9 @@ module.exports = {
       { from: '../LICENSE', to: '.' },
       { from: 'partials/*', to: '.' },
       { from: 'img/*', to: '.' },
+      { from: 'dashboards/*', to: '.' },
+      { from: 'external/*', to: '.' },
+      { from: 'components/*', to: '.' },
     ]),
   ],
   resolve: {
