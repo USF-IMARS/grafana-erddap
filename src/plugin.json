@@ -1,7 +1,7 @@
 {
-  "type": "panel",
-  "name": "Clock",
-  "id": "grafana-clock-panel",
+    "type": "app",
+    "name": "Clock",
+    "id": "grafana-clock-app",
 
   "info": {
     "description": "Clock panel for grafana",
@@ -22,9 +22,13 @@
       {"name": "Showcase", "path": "img/screenshot-showcase.png"},
       {"name": "Options", "path": "img/screenshot-clock-options.png"}
     ],
-    "version": "1.0.0",
-    "updated": "2018-11-21"
+    "version": "0.0.1",
+    "updated": "2018-11-26"
   },
+  "includes": [
+    {"type": "panel", "name": "Clock App Panel"},
+    {"type": "datasource", "name": "Clock App Datasource"}
+  ],
 
   "dependencies": {
     "grafanaVersion": "5.x.x",
