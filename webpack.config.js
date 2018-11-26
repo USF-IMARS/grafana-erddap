@@ -33,6 +33,8 @@ module.exports = {
     new webpack.optimize.OccurrenceOrderPlugin(),
     new CopyWebpackPlugin([
       { from: 'plugin.json', to: '.' },
+      { from: 'datasource/plugin.json', to: 'datasource/.' },
+      { from: 'panel/plugin.json', to: 'panel/.' },
       { from: '../README.md', to: '.' },
       { from: '../LICENSE', to: '.' },
       { from: 'partials/*', to: '.' },
