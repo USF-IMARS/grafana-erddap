@@ -65,6 +65,7 @@ Using Docker:
     * if no: probably malformed `plugin.json`
 1. does the output in `./dist/` look right?
 1. is your plugin volume mounted properly? `sudo docker exec gf-dev ls /var/lib/grafana/plugins`
+1. have you tried restarting the docker container? `sudo docker restart gf-dev`
 
 #### Changelog
 

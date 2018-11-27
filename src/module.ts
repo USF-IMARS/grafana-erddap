@@ -1,4 +1,4 @@
-import {ExampleAppDatasource} from  './datasource';
+import ERDDAPDatasource from  './datasource';
 
 class ExampleAppConfigCtrl {
     // template = '<datasource-http-settings current="ctrl.current"></datasource-http-settings>';
@@ -6,6 +6,6 @@ class ExampleAppConfigCtrl {
 }
 
 export {
-  ExampleAppDatasource,
+  ERDDAPDatasource as Datasource,
   ExampleAppConfigCtrl as ConfigCtrl
 };
