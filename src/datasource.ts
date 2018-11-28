@@ -7,7 +7,7 @@ export default class ERDDAPDatasource {
     id: number;
     name: string;
 
-    public url: string = 'https://coastwatch.pfeg.noaa.gov/erddap/griddap/jplMURSST41anom1day.graph';
+    public url: string = 'https://coastwatch.pfeg.noaa.gov/erddap';
 
     // Switch IV to DV when the interval is large
     // maxIVinterval:3000000;
@@ -15,7 +15,9 @@ export default class ERDDAPDatasource {
 
     /** @ngInject */
     constructor(instanceSettings, private $q, private backendSrv) {
-        console.log(instanceSettings, $q, backendSrv);
+        console.log("settings:", instanceSettings)
+        console.log("$q: ", this.$q)
+        console.log("backSrv:", backendSrv)
 
         this.id = instanceSettings.id;
         this.name = instanceSettings.name;
@@ -27,28 +29,58 @@ export default class ERDDAPDatasource {
     }
 
     query(options) {
+        console.log('ERDDAP query options:')
         console.log(options);
+        // return this.$q.reject({message: 'TEST FAIL'})
+        let constructed_url = this.url;
+        // https://coastwatch.pfeg.noaa.gov/erddap
 
-        if (true){
-            return this.$q.reject({message: 'TEST FAIL'})
-        } else {
-            return this.backendSrv
-              .datasourceRequest({
-                url: this.url,
-                method: 'GET',
-              })
-              .then(result => {
-              });
-        }
+        // + path to base url (TODO from panel options)
+        const product_id = 'jplMURSST41anom1day'
+        constructed_url += '/griddap/' + product_id + '.json?'
+
+        // === + query string to url (TODO from panel options)
+        const var_name = 'sstAnom'
+        constructed_url += var_name
+
+        let time_lat_lon_indicies = ''
+        // time
+        const fmt = 'YYYY-MM-DDTHH:mm:00[Z]'; // UTC without seconds
+        const t_0 = options.range.from.utc().format(fmt);
+        const t_f = options.range.to.utc().format(fmt);
+        time_lat_lon_indicies += '[(' + t_0 + '):1:(' + t_f + ')]'
+        // lat & lon
+        const lat_min = -24
+        const lat_max = -23
+        time_lat_lon_indicies += '[(' + lat_min + '):1:(' + lat_max + ')]'
+        const lon_min = 178
+        const lon_max = 180
+        time_lat_lon_indicies += '[(' + lon_min + '):1:(' + lon_max + ')]'
+
+        constructed_url += time_lat_lon_indicies //+ ',mask' + time_lat_lon_indicies
+        return this.backendSrv
+          .datasourceRequest({
+            url: constructed_url,
+            method: 'GET',
+            headers: {'Content-Type': 'application/json'},
+          })
+          .then(result => {
+              console.log('result data:', result.data)
+              // const lines = result.data.split('\n');
+              // const info = this.readRDB(lines, true, args.show, tooBigForIV);
+              // return {data: info.series};
+          });
     }
 
     testDatasource() {
+        // test query options
         let options = {
             range: {
-                from: moment().add(-4, 'h'),
+                from: moment().subtract(90, 'd'),
+                to: moment().subtract(88, 'd'),
             },
             rangeRaw: {
-                to: 'now',
+                // to: 'now',
             },
             targets: [
                 {
