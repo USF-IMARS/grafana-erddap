@@ -7,7 +7,7 @@ export default class ERDDAPDatasource {
     id: number;
     name: string;
 
-    public url: string = 'https://coastwatch.pfeg.noaa.gov/erddap';
+    public url: string = 'http://imars-physalis.marine.usf.edu:8080/erddap';
 
     // Switch IV to DV when the interval is large
     // maxIVinterval:3000000;
@@ -34,6 +34,7 @@ export default class ERDDAPDatasource {
         // return this.$q.reject({message: 'TEST FAIL'})
         let constructed_url = this.url;
         // https://coastwatch.pfeg.noaa.gov/erddap
+        // http://imars-physalis.marine.usf.edu:8080/erddap
 
         // + path to base url (TODO from panel options)
         const product_id = 'jplMURSST41anom1day'

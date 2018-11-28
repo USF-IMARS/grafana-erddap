@@ -3,7 +3,8 @@
         <h5 class="section-heading">ERDDAP Server</h5>
         <div class="gf-form">
             <!-- Example URLs:
-                    https://coastwatch.pfeg.noaa.gov/erddap/griddap/jplMURSST41anom1day.graph
+                    https://coastwatch.pfeg.noaa.gov/erddap
+                    http://imars-physalis.marine.usf.edu:8080/erddap
             </ul> -->
             <div class="gf-form-inline">
                 <div class="gf-form max-width-30">
@@ -11,7 +12,7 @@
                 </div>
                 <input
                 type="text" class="gf-form-input width-30"
-                ng-init="ctrl.current.URL='https://coastwatch.pfeg.noaa.gov/erddap'"
+                ng-init="ctrl.current.URL='http://imars-physalis.marine.usf.edu:8080/erddap'"
                 ng-model="ctrl.current.URL"
                 ng-change="ctrl.render()"
                 ng-model-onblur
