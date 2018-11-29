@@ -1,6 +1,7 @@
 // import { MetricsPanelCtrl } from 'grafana/app/features/panel/metrics_panel_ctrl';
 // import { MetricsPanelCtrl } from 'grafana/app/plugins/metrics_panel_ctrl';
 import { MetricsPanelCtrl } from 'grafana/app/plugins/sdk'; // will be resolved to app/plugins/sdk
+import './css/panel.base.css';
 
 // import { PanelCtrl } from 'grafana/app/features/panel/panel_ctrl';
 
@@ -29,7 +30,7 @@ class Ctrl extends MetricsPanelCtrl {
     }
 
     initStyles() {
-        // window.System.import(this.panelPath + 'css/panel.base.css!');
+        // (window as any).System.import(this.panelPath + 'css/panel.base.css!');
         // Remove next lines if you don't need separate styles for light and dark themes
         // if (grafanaBootData.user.lightTheme) {
         //     window.System.import(this.panelPath + 'css/panel.light.css!');
