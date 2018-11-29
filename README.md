@@ -1,5 +1,10 @@
 ## ERDDAP Panel for Grafana
 
+### Installation
+1. cd to your grafana plugin dir `cd /var/lib/grafana/plugins/`
+1. clone repo `git clone https://github.com/USF-IMARS/grafana-erddap --branch prod ./erddap-panel`
+1. restart grafana `service grafana-server restart`
+1. check if installed: `grafana-cli plugins ls | grep erddap`
 ### Development
 
 Using Docker:
