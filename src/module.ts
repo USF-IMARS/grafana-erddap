@@ -1,17 +1,5 @@
-// import { MetricsPanelCtrl } from 'grafana/app/features/panel/metrics_panel_ctrl';
-// import { MetricsPanelCtrl } from 'grafana/app/plugins/metrics_panel_ctrl';
 import { MetricsPanelCtrl } from 'grafana/app/plugins/sdk'; // will be resolved to app/plugins/sdk
 import './css/panel.base.css';
-
-// import { PanelCtrl } from 'grafana/app/features/panel/panel_ctrl';
-
-// Fetch error: 404 Not Found Instantiating
-// http://localhost:3000/public/app/features/panel/metrics_panel_ctrl
-//  Loading
-//  http://localhost:3000/public/plugins/clock-example-app-datasource/module.js
-//  Loading
-//  plugins/clock-example-app-datasource/module
-
 
 class Ctrl extends MetricsPanelCtrl {
     static templateUrl = "partials/template.html";

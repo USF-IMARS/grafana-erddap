@@ -1,7 +1,7 @@
 {
-  "name": "grafana-clock-app",
+  "name": "erddap-panel",
   "version": "0.0.1",
-  "description": "Clock App Plugin for Grafana",
+  "description": "Read in ERDDAP data",
   "main": "src/module.js",
   "scripts": {
     "build": "node --max-old-space-size=8192 ./node_modules/.bin/webpack --config webpack.config.prod.js",

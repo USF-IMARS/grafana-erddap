@@ -1,5 +1,25 @@
 {
     "type": "panel",
     "name": "ERDDAP Panel",
-    "id": "clock-example-app-datasource"
+    "id": "erddap-panel",
+    "info": {
+    "description": "Read in ERDDAP data",
+    "author": {
+        "name": "USF IMaRS (Tylar Murray)",
+        "url": "http://imars.marine.usf.edu/"
+    },
+    "logos": {
+        "small": "img/usgs.svg",
+        "large": "img/usgs.svg"
+    },
+    "links": [
+        {"name": "Project Page", "url": "https://github.com/USF-IMARS/grafana-erddap"}
+    ],
+    "screenshots": [
+        { "name": "Example",  "path": "img/screenshot-1.png" }
+    ],
+        "version": "%VERSION%",
+        "updated": "%TODAY%"
+    },
+
 }
