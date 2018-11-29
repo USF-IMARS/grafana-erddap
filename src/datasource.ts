@@ -19,6 +19,7 @@ export default class ERDDAPDatasource {
         console.log("$q: ", this.$q)
         console.log("backSrv:", backendSrv)
 
+        this.url = instanceSettings.jsonData.url;
         this.id = instanceSettings.id;
         this.name = instanceSettings.name;
 
@@ -97,7 +98,7 @@ export default class ERDDAPDatasource {
             return {status: 'success', message: 'Data source is working', title: 'Success'};
         })
         .catch(ex => {
-            console.log('Error Testing USGS', ex);
+            console.log('Error Testing ERDDAP', ex);
             let msg = ex;
             if (ex.message) {
                 msg = ex.message;
