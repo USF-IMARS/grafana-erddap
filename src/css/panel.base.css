@@ -1,6 +1,0 @@
-.erddap-img:hover {
-    -moz-transform: scale(2) translate(0%,25%);
-    -webkit-transform: scale(2) translate(0%,25%);
-    transform: scale(2) translate(0%,25%);
-    transition: transform .25s ease;
-}
