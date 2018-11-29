@@ -1,10 +1,5 @@
 {
-    "type": "datasource",
-    "name": "Example App Datasource",
-    "id": "clock-example-app-datasource",
-    "routes": [{
-        "path": "imars",
-        "method": "GET",
-        "url": "http://imars-physalis.marine.usf.edu:8080"
-    }]
+    "type": "panel",
+    "name": "ERDDAP Panel",
+    "id": "clock-example-app-datasource"
 }
