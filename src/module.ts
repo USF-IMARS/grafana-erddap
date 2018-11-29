@@ -76,7 +76,7 @@ class Ctrl extends MetricsPanelCtrl {
 
         // + path to base url (TODO from panel options)
         const product_id = 'jplMURSST41anom1day'
-        constructed_url += '/griddap/' + product_id + '.transparentPng?'
+        constructed_url += '/griddap/' + product_id + '.largePng?'
 
         // === + query string to url (TODO from panel options)
         const var_name = 'sstAnom'
@@ -89,9 +89,9 @@ class Ctrl extends MetricsPanelCtrl {
         time_lat_lon_indicies += '[(' + time + ')]'
         // lat & lon
         const lat_min = 23.5
-        const lat_max = 25
+        const lat_max = 27
         time_lat_lon_indicies += '[(' + lat_min + '):(' + lat_max + ')]'
-        const lon_min = -82
+        const lon_min = -83
         const lon_max = -80
         time_lat_lon_indicies += '[(' + lon_min + '):(' + lon_max + ')]'
         constructed_url += time_lat_lon_indicies //+ ',mask' + time_lat_lon_indicies
