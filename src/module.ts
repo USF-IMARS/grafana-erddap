@@ -3,7 +3,7 @@ import './css/panel.base.css';
 
 class Ctrl extends MetricsPanelCtrl {
     static templateUrl = "partials/template.html";
-    public url = ""
+    public url = "http://imars-physalis:8080/erddap"
     public constructed_urls = [] as string[];
     public _panelPath = 'undefined'
     public img_width = 100.0
@@ -37,7 +37,6 @@ class Ctrl extends MetricsPanelCtrl {
     }
 
     build_urls(){
-        this.url = 'http://imars-physalis:8080/erddap';
         this.updateTimeRange()
         const t_0 = this.range.from.utc()
         const t_f = this.range.to.utc()
