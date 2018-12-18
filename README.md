@@ -25,8 +25,28 @@ Using Docker:
 1. is your plugin volume mounted properly? `sudo docker exec gf-dev ls /var/lib/grafana/plugins`
 1. have you tried restarting the docker container? `sudo docker restart gf-dev`
 
+#### `prod` branch
+The `prod` branch is special; it contains only the output normally in `/dist`.
+Do not try to merge to this branch as you normally would.
+Instead you must copy a build into it manually.
+
+steps:
+1. build the latest master version into `./dist`
+    * the `watch` task does this automatically; stop it before proceeding.
+1. switch to `prod` branch: `git checkout prod`
+1. merge changes from new build: `cp ./dist/* .`
+1. use `git status` & `git add` to stage changes
+1. `git commit` to the `prod` branch
+
 #### Changelog
+##### v0.1.0
+- editor options added to config ERDDAP request(s)
+- color invert replaces zoom effect on img hover
+- img opens in new tab on click
+- first actually working version
+
+##### v0.0.2
+- editor tab added
 
 ##### v0.0.1
-
 - first "working" version
