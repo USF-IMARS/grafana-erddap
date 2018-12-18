@@ -1,22 +1,28 @@
 import { MetricsPanelCtrl } from 'grafana/app/plugins/sdk'; // will be resolved to app/plugins/sdk
 import './css/panel.base.css';
+import _ from 'lodash';
 
 class Ctrl extends MetricsPanelCtrl {
     static templateUrl = "partials/template.html";
-    public url = "http://imars-physalis:8080/erddap"
-    public product_id = 'jplMURSST41anom1day'
-    public variable_id = 'sstAnom'
     public constructed_urls = [] as string[];
     public _panelPath = 'undefined'
     public img_width = 100.0
-    public lat_min = 23.5
-    public lat_max = 26
-    public lon_min = -84
-    public lon_max = -79.5
+    public panel: any;
 
+    // Set and populate defaults
+    panelDefaults = {
+        url: "http://imars-physalis:8080/erddap",
+        product_id: 'jplMURSST41anom1day',
+        variable_id: 'sstAnom',
+        lat_min: 23.5,
+        lat_max: 26,
+        lon_min: -84,
+        lon_max: -79.5
+    };
 
     constructor($scope, $injector) {
         super($scope, $injector);
+        _.defaults(this.panel, this.panelDefaults);
         this.events.on('refresh', this.build_urls.bind(this));
         this.events.on('init-edit-mode', this.onInitEditMode.bind(this));
     }
@@ -66,15 +72,15 @@ class Ctrl extends MetricsPanelCtrl {
     get_url(the_moment){
         // const t_0 = this.range.from.utc().format(fmt);
         // const t_f = this.range.to.utc().format(fmt);
-        let constructed_url = this.url;
+        let constructed_url = this.panel.url;
         // https://coastwatch.pfeg.noaa.gov/erddap
         // http://imars-physalis.marine.usf.edu:8080/erddap
 
         // + path to base url (TODO from panel options)
-        constructed_url += '/griddap/' + this.product_id + '.largePng?'
+        constructed_url += '/griddap/' + this.panel.product_id + '.largePng?'
 
         // === + query string to url (TODO from panel options)
-        constructed_url += this.variable_id
+        constructed_url += this.panel.variable_id
 
         let time_lat_lon_indicies = ''
         // time
@@ -82,10 +88,10 @@ class Ctrl extends MetricsPanelCtrl {
         const time = the_moment.format(fmt)
         time_lat_lon_indicies += '[(' + time + ')]'
         // lat & lon
-        time_lat_lon_indicies += '[(' + this.lat_min + '):(' + this.lat_max + ')]'
-        time_lat_lon_indicies += '[(' + this.lon_min + '):(' + this.lon_max + ')]'
+        time_lat_lon_indicies += '[(' + this.panel.lat_min + '):(' + this.panel.lat_max + ')]'
+        time_lat_lon_indicies += '[(' + this.panel.lon_min + '):(' + this.panel.lon_max + ')]'
         constructed_url += time_lat_lon_indicies //+ ',mask' + time_lat_lon_indicies
-        constructed_url += '&.draw=surface&.vars=longitude%7Clatitude%7C' + this.variable_id + '&.colorBar=%7C%7C%7C%7C%7C&.bgColor=0xffccccff'
+        constructed_url += '&.draw=surface&.vars=longitude%7Clatitude%7C' + this.panel.variable_id + '&.colorBar=%7C%7C%7C%7C%7C&.bgColor=0xffccccff'
         return constructed_url
     }
 

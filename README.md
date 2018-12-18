@@ -39,6 +39,9 @@ steps:
 1. `git commit` to the `prod` branch
 
 #### Changelog
+##### v0.1.1
+- fix bugs preventing save & use of configs
+
 ##### v0.1.0
 - editor options added to config ERDDAP request(s)
 - color invert replaces zoom effect on img hover
