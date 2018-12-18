@@ -98,7 +98,7 @@ exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader
 
 
 // module
-exports.push([module.i, ".erddap-img:hover {\n    -moz-transform: scale(2) translate(0%,25%);\n    -webkit-transform: scale(2) translate(0%,25%);\n    transform: scale(2) translate(0%,25%);\n    transition: transform .25s ease;\n}\n", "", {"version":3,"sources":["/home/tylar/grafana-erddap/src/css/panel.base.css"],"names":[],"mappings":"AAAA;IACI,2CAA2C;IAC3C,8CAA8C;IAC9C,sCAAsC;IACtC,gCAAgC;CACnC","file":"panel.base.css","sourcesContent":[".erddap-img:hover {\n    -moz-transform: scale(2) translate(0%,25%);\n    -webkit-transform: scale(2) translate(0%,25%);\n    transform: scale(2) translate(0%,25%);\n    transition: transform .25s ease;\n}\n"],"sourceRoot":""}]);
+exports.push([module.i, ".erddap-img:hover {\n    -webkit-filter: invert(100%) !important;\n}\n", "", {"version":3,"sources":["/home/tylar/grafana-erddap/src/css/panel.base.css"],"names":[],"mappings":"AAAA;IACI,wCAAwC;CAC3C","file":"panel.base.css","sourcesContent":[".erddap-img:hover {\n    -webkit-filter: invert(100%) !important;\n}\n"],"sourceRoot":""}]);
 
 // exports
 
@@ -784,12 +784,20 @@ function (_super) {
   function Ctrl($scope, $injector) {
     var _this = _super.call(this, $scope, $injector) || this;
 
-    _this.url = "";
+    _this.url = "http://imars-physalis:8080/erddap";
+    _this.product_id = 'jplMURSST41anom1day';
+    _this.variable_id = 'sstAnom';
     _this.constructed_urls = [];
     _this._panelPath = 'undefined';
     _this.img_width = 100.0;
+    _this.lat_min = 23.5;
+    _this.lat_max = 26;
+    _this.lon_min = -84;
+    _this.lon_max = -79.5;
 
     _this.events.on('refresh', _this.build_urls.bind(_this));
+
+    _this.events.on('init-edit-mode', _this.onInitEditMode.bind(_this));
 
     return _this;
   }
@@ -821,7 +829,6 @@ function (_super) {
   });
 
   Ctrl.prototype.build_urls = function () {
-    this.url = 'http://imars-physalis:8080/erddap';
     this.updateTimeRange();
     var t_0 = this.range.from.utc();
     var t_f = this.range.to.utc();
@@ -850,8 +857,7 @@ function (_super) {
     // http://imars-physalis.marine.usf.edu:8080/erddap
     // + path to base url (TODO from panel options)
 
-    var product_id = 'jplMURSST41anom1day';
-    constructed_url += '/griddap/' + product_id + '.largePng?'; // === + query string to url (TODO from panel options)
+    constructed_url += '/griddap/' + this.product_id + '.largePng?'; // === + query string to url (TODO from panel options)
 
     var var_name = 'sstAnom';
     constructed_url += var_name;
@@ -862,16 +868,17 @@ function (_super) {
     var time = the_moment.format(fmt);
     time_lat_lon_indicies += '[(' + time + ')]'; // lat & lon
 
-    var lat_min = 23.5;
-    var lat_max = 27;
-    time_lat_lon_indicies += '[(' + lat_min + '):(' + lat_max + ')]';
-    var lon_min = -83;
-    var lon_max = -80;
-    time_lat_lon_indicies += '[(' + lon_min + '):(' + lon_max + ')]';
+    time_lat_lon_indicies += '[(' + this.lat_min + '):(' + this.lat_max + ')]';
+    time_lat_lon_indicies += '[(' + this.lon_min + '):(' + this.lon_max + ')]';
     constructed_url += time_lat_lon_indicies; //+ ',mask' + time_lat_lon_indicies
 
-    constructed_url += '&.draw=surface&.vars=longitude%7Clatitude%7CsstAnom&.colorBar=%7C%7C%7C%7C%7C&.bgColor=0xffccccff';
+    constructed_url += '&.draw=surface&.vars=longitude%7Clatitude%7C' + this.variable_id + '&.colorBar=%7C%7C%7C%7C%7C&.bgColor=0xffccccff';
     return constructed_url;
+  };
+
+  Ctrl.prototype.onInitEditMode = function () {
+    // this.addEditorTab('test1', 'public/app/plugins/panel/singlestat/mappings.html', 3);
+    this.addEditorTab('ERDDAP Connection', this.panelPath + 'partials/editor.html', 1); // this.addEditorTab('Not-Yet-Implemented', this.panelPath + 'partials/nyi.html', 99);
   };
 
   Ctrl.templateUrl = "partials/template.html";
