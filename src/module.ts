@@ -5,9 +5,15 @@ class Ctrl extends MetricsPanelCtrl {
     static templateUrl = "partials/template.html";
     public url = "http://imars-physalis:8080/erddap"
     public product_id = 'jplMURSST41anom1day'
+    public variable_id = 'sstAnom'
     public constructed_urls = [] as string[];
     public _panelPath = 'undefined'
     public img_width = 100.0
+    public lat_min = 23.5
+    public lat_max = 26
+    public lon_min = -84
+    public lon_max = -79.5
+
 
     constructor($scope, $injector) {
         super($scope, $injector);
@@ -77,20 +83,16 @@ class Ctrl extends MetricsPanelCtrl {
         const time = the_moment.format(fmt)
         time_lat_lon_indicies += '[(' + time + ')]'
         // lat & lon
-        const lat_min = 23.5
-        const lat_max = 27
-        time_lat_lon_indicies += '[(' + lat_min + '):(' + lat_max + ')]'
-        const lon_min = -83
-        const lon_max = -80
-        time_lat_lon_indicies += '[(' + lon_min + '):(' + lon_max + ')]'
+        time_lat_lon_indicies += '[(' + this.lat_min + '):(' + this.lat_max + ')]'
+        time_lat_lon_indicies += '[(' + this.lon_min + '):(' + this.lon_max + ')]'
         constructed_url += time_lat_lon_indicies //+ ',mask' + time_lat_lon_indicies
-        constructed_url += '&.draw=surface&.vars=longitude%7Clatitude%7CsstAnom&.colorBar=%7C%7C%7C%7C%7C&.bgColor=0xffccccff'
+        constructed_url += '&.draw=surface&.vars=longitude%7Clatitude%7C' + this.variable_id + '&.colorBar=%7C%7C%7C%7C%7C&.bgColor=0xffccccff'
         return constructed_url
     }
 
     onInitEditMode() {
         // this.addEditorTab('test1', 'public/app/plugins/panel/singlestat/mappings.html', 3);
-        this.addEditorTab('ERDDAP Server', this.panelPath + 'partials/editor.html', 1);
+        this.addEditorTab('ERDDAP Connection', this.panelPath + 'partials/editor.html', 1);
         // this.addEditorTab('Not-Yet-Implemented', this.panelPath + 'partials/nyi.html', 99);
     }
 
