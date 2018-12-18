@@ -18,7 +18,7 @@
     "screenshots": [
         { "name": "Example",  "path": "img/screenshot-1.png" }
     ],
-        "version": "0.0.1",
-        "updated": "2018-11-29"
+        "version": "0.0.2",
+        "updated": "2018-12-18"
     }
 }

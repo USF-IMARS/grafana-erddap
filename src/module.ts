@@ -11,6 +11,7 @@ class Ctrl extends MetricsPanelCtrl {
     constructor($scope, $injector) {
         super($scope, $injector);
         this.events.on('refresh', this.build_urls.bind(this));
+        this.events.on('init-edit-mode', this.onInitEditMode.bind(this));
     }
 
     link(scope, element) {
@@ -87,6 +88,13 @@ class Ctrl extends MetricsPanelCtrl {
         constructed_url += '&.draw=surface&.vars=longitude%7Clatitude%7CsstAnom&.colorBar=%7C%7C%7C%7C%7C&.bgColor=0xffccccff'
         return constructed_url
     }
+
+    onInitEditMode() {
+        // this.addEditorTab('test1', 'public/app/plugins/panel/singlestat/mappings.html', 3);
+        this.addEditorTab('ERDDAP Server', this.panelPath + 'partials/editor.html', 1);
+        // this.addEditorTab('Not-Yet-Implemented', this.panelPath + 'partials/nyi.html', 99);
+    }
+
 }
 
 
