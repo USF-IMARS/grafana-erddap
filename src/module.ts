@@ -74,8 +74,7 @@ class Ctrl extends MetricsPanelCtrl {
         constructed_url += '/griddap/' + this.product_id + '.largePng?'
 
         // === + query string to url (TODO from panel options)
-        const var_name = 'sstAnom'
-        constructed_url += var_name
+        constructed_url += this.variable_id
 
         let time_lat_lon_indicies = ''
         // time
