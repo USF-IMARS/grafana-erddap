@@ -1,4 +1,4 @@
-define(["app/plugins/sdk"], function(__WEBPACK_EXTERNAL_MODULE_grafana_app_plugins_sdk__) { return /******/ (function(modules) { // webpackBootstrap
+define(["app/plugins/sdk","lodash"], function(__WEBPACK_EXTERNAL_MODULE_grafana_app_plugins_sdk__, __WEBPACK_EXTERNAL_MODULE_lodash__) { return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 /******/
@@ -750,6 +750,12 @@ var _sdk = __webpack_require__(/*! grafana/app/plugins/sdk */ "grafana/app/plugi
 
 __webpack_require__(/*! ./css/panel.base.css */ "./css/panel.base.css");
 
+var _lodash = __webpack_require__(/*! lodash */ "lodash");
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 var __extends = undefined && undefined.__extends || function () {
   var _extendStatics = function extendStatics(d, b) {
     _extendStatics = Object.setPrototypeOf || {
@@ -784,16 +790,21 @@ function (_super) {
   function Ctrl($scope, $injector) {
     var _this = _super.call(this, $scope, $injector) || this;
 
-    _this.url = "http://imars-physalis:8080/erddap";
-    _this.product_id = 'jplMURSST41anom1day';
-    _this.variable_id = 'sstAnom';
     _this.constructed_urls = [];
     _this._panelPath = 'undefined';
-    _this.img_width = 100.0;
-    _this.lat_min = 23.5;
-    _this.lat_max = 26;
-    _this.lon_min = -84;
-    _this.lon_max = -79.5;
+    _this.img_width = 100.0; // Set and populate defaults
+
+    _this.panelDefaults = {
+      url: "http://imars-physalis:8080/erddap",
+      product_id: 'jplMURSST41anom1day',
+      variable_id: 'sstAnom',
+      lat_min: 23.5,
+      lat_max: 26,
+      lon_min: -84,
+      lon_max: -79.5
+    };
+
+    _lodash2.default.defaults(_this.panel, _this.panelDefaults);
 
     _this.events.on('refresh', _this.build_urls.bind(_this));
 
@@ -853,14 +864,13 @@ function (_super) {
   Ctrl.prototype.get_url = function (the_moment) {
     // const t_0 = this.range.from.utc().format(fmt);
     // const t_f = this.range.to.utc().format(fmt);
-    var constructed_url = this.url; // https://coastwatch.pfeg.noaa.gov/erddap
+    var constructed_url = this.panel.url; // https://coastwatch.pfeg.noaa.gov/erddap
     // http://imars-physalis.marine.usf.edu:8080/erddap
     // + path to base url (TODO from panel options)
 
-    constructed_url += '/griddap/' + this.product_id + '.largePng?'; // === + query string to url (TODO from panel options)
+    constructed_url += '/griddap/' + this.panel.product_id + '.largePng?'; // === + query string to url (TODO from panel options)
 
-    var var_name = 'sstAnom';
-    constructed_url += var_name;
+    constructed_url += this.panel.variable_id;
     var time_lat_lon_indicies = ''; // time
 
     var fmt = 'YYYY-MM-DDTHH:mm:00[Z]'; // UTC without seconds
@@ -868,11 +878,11 @@ function (_super) {
     var time = the_moment.format(fmt);
     time_lat_lon_indicies += '[(' + time + ')]'; // lat & lon
 
-    time_lat_lon_indicies += '[(' + this.lat_min + '):(' + this.lat_max + ')]';
-    time_lat_lon_indicies += '[(' + this.lon_min + '):(' + this.lon_max + ')]';
+    time_lat_lon_indicies += '[(' + this.panel.lat_min + '):(' + this.panel.lat_max + ')]';
+    time_lat_lon_indicies += '[(' + this.panel.lon_min + '):(' + this.panel.lon_max + ')]';
     constructed_url += time_lat_lon_indicies; //+ ',mask' + time_lat_lon_indicies
 
-    constructed_url += '&.draw=surface&.vars=longitude%7Clatitude%7C' + this.variable_id + '&.colorBar=%7C%7C%7C%7C%7C&.bgColor=0xffccccff';
+    constructed_url += '&.draw=surface&.vars=longitude%7Clatitude%7C' + this.panel.variable_id + '&.colorBar=%7C%7C%7C%7C%7C&.bgColor=0xffccccff';
     return constructed_url;
   };
 
@@ -897,6 +907,17 @@ exports.PanelCtrl = Ctrl;
 /***/ (function(module, exports) {
 
 module.exports = __WEBPACK_EXTERNAL_MODULE_grafana_app_plugins_sdk__;
+
+/***/ }),
+
+/***/ "lodash":
+/*!*************************!*\
+  !*** external "lodash" ***!
+  \*************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE_lodash__;
 
 /***/ })
 
