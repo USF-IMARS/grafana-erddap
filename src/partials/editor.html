@@ -14,10 +14,19 @@
                     <span class="gf-form-label width-7">URL</span>
                 </div>
                 <input
-                type="text" class="gf-form-input width-30"
-                ng-model="ctrl.url"
-                ng-change="ctrl.refresh()"
-                ng-model-onblur
+                    type="text" class="gf-form-input width-30"
+                    ng-model="ctrl.url"
+                    ng-change="ctrl.refresh()"
+                    ng-model-onblur
+                />
+                <div class="gf-form max-width-3">
+                    <span class="gf-form-label width-1">/</span>
+                </div>
+                <input
+                    type="text" class="gf-form-input width-30"
+                    ng-model="ctrl.product_id"
+                    ng-change="ctrl.refresh()"
+                    ng-model-onblur
                 />
             </div>
         </div>

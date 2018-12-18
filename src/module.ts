@@ -4,6 +4,7 @@ import './css/panel.base.css';
 class Ctrl extends MetricsPanelCtrl {
     static templateUrl = "partials/template.html";
     public url = "http://imars-physalis:8080/erddap"
+    public product_id = 'jplMURSST41anom1day'
     public constructed_urls = [] as string[];
     public _panelPath = 'undefined'
     public img_width = 100.0
@@ -64,8 +65,7 @@ class Ctrl extends MetricsPanelCtrl {
         // http://imars-physalis.marine.usf.edu:8080/erddap
 
         // + path to base url (TODO from panel options)
-        const product_id = 'jplMURSST41anom1day'
-        constructed_url += '/griddap/' + product_id + '.largePng?'
+        constructed_url += '/griddap/' + this.product_id + '.largePng?'
 
         // === + query string to url (TODO from panel options)
         const var_name = 'sstAnom'
