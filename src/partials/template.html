@@ -3,10 +3,9 @@ url: {{constructed_urls[0]}} <br>
 url: {{url}} <br> -->
 <div class="erddap-img-row">
         <!-- url: {{url}} <br> -->
-        <a href="{{url}}" ng-repeat="url in constructed_urls" target="_blank">
-            <img class="erddap-img"
-                ng-src="{{url}}"
-                width="{{img_width}}%"
-            />
-        </a>
+        <a
+            href="{{url}}"
+            ng-repeat="url in constructed_urls"
+            target="_blank"
+        ><img class="erddap-img" ng-src="{{url}}" width="{{img_width}}%"/></a>
 </div>
