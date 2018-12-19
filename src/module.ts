@@ -20,7 +20,7 @@ class Ctrl extends MetricsPanelCtrl {
         lon_min: -84,
         lon_max: -79.5,
         delta: 1,
-        delta_unit: 'days'
+        delta_unit: 'weeks'
     };
 
     constructor($scope, $injector) {
@@ -60,6 +60,9 @@ class Ctrl extends MetricsPanelCtrl {
         let url_list = [] as string[];
         while (time.isBefore(t_f)){
             // console.log(time)
+            // TODO: check if image at url is already in url_list
+            //       if it is push placeholder instead for more info
+            //       see USF-IMARS/grafana-erddap#3
             url_list.push(this.get_url(time))
             // console.log(`+ ${this.panel.delta} ${this.panel.delta_unit}(s)`)
             time = time.add(this.panel.delta, this.panel.delta_unit)
