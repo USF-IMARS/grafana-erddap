@@ -87,6 +87,35 @@
                 />
             </div>
         </div>
+        <div class="gf-form">
+            <div class="gf-form-inline">
+                <div class="gf-form max-width-30">
+                    <span class="gf-form-label width-7">time delta</span>
+                </div>
+                <input
+                    type="number" class="gf-form-input width-10"
+                    ng-model="ctrl.panel.delta"
+                    ng-change="ctrl.refresh()"
+                    ng-min="1"
+                    ng-model-onblur
+                />
+                <!--
+                NOTE: minutes, seconds, & milliseconds intentionally excluded
+                from option list below though they are valid in momentjs
+                -->
+                <select
+                    class="gf-form-input width-10"
+                    ng-model="ctrl.panel.delta_unit"
+                    ng-options="f for f in ['years', 'months', 'weeks', 'days', 'hours'] track by f"
+                    ng-change="ctrl.refresh()"
+                    ng-model-onblur
+                ></select>
+                <info-popover>
+                    Amount of time between image frames.<br>
+                    Will throw error if loading too many images.
+                </info-popover>
+            </div>
+        </div>
     </div>  <!-- /section group -->
     <div class="section gf-form-group">
         NOTE: "Metrics" tab is non-functional for this panel.
