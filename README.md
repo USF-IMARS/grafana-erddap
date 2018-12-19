@@ -39,6 +39,10 @@ steps:
 1. `git commit` to the `prod` branch
 
 #### Changelog
+##### v0.2.0
+- + time delta to editor
+- other minor panel editor improvements
+
 ##### v0.1.1
 - fix bugs preventing save & use of configs
 
