@@ -9,8 +9,8 @@
         "url": "http://imars.marine.usf.edu/"
     },
     "logos": {
-        "small": "img/usgs.svg",
-        "large": "img/usgs.svg"
+        "small": "img/small_logo.png",
+        "large": "img/large_logo.png"
     },
     "links": [
         {"name": "Project Page", "url": "https://github.com/USF-IMARS/grafana-erddap"}
