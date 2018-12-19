@@ -34,11 +34,15 @@ steps:
 1. build the latest master version into `./dist`
     * the `watch` task does this automatically; stop it before proceeding.
 1. switch to `prod` branch: `git checkout prod`
-1. merge changes from new build: `cp ./dist/* .`
+1. merge changes from new build: `cp -R ./dist/* .`
 1. use `git status` & `git add` to stage changes
 1. `git commit` to the `prod` branch
 
 #### Changelog
+##### v0.2.0
+- + time delta to editor
+- other minor panel editor improvements
+
 ##### v0.1.1
 - fix bugs preventing save & use of configs
 

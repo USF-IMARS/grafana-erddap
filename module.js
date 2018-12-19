@@ -801,7 +801,9 @@ function (_super) {
       lat_min: 23.5,
       lat_max: 26,
       lon_min: -84,
-      lon_max: -79.5
+      lon_max: -79.5,
+      delta: 1,
+      delta_unit: 'weeks'
     };
 
     _lodash2.default.defaults(_this.panel, _this.panelDefaults);
@@ -843,14 +845,21 @@ function (_super) {
     this.updateTimeRange();
     var t_0 = this.range.from.utc();
     var t_f = this.range.to.utc();
-    var delta = 1;
     var time = t_0;
     var url_list = [];
 
     while (time.isBefore(t_f)) {
       // console.log(time)
-      url_list.push(this.get_url(time));
-      time = time.add(delta, 'days');
+      // TODO: check if image at url is already in url_list
+      //       if it is push placeholder instead for more info
+      //       see USF-IMARS/grafana-erddap#3
+      url_list.push(this.get_url(time)); // console.log(`+ ${this.panel.delta} ${this.panel.delta_unit}(s)`)
+
+      time = time.add(this.panel.delta, this.panel.delta_unit);
+
+      if (url_list.length > Ctrl.MAX_IMAGES) {
+        throw "loading too many images (> " + Ctrl.MAX_IMAGES + ")"; // TODO: put this in the UI somewhere?
+      }
     }
 
     this.constructed_urls = url_list; // console.log('urls:', this.constructed_urls)
@@ -892,6 +901,7 @@ function (_super) {
   };
 
   Ctrl.templateUrl = "partials/template.html";
+  Ctrl.MAX_IMAGES = 30;
   return Ctrl;
 }(_sdk.MetricsPanelCtrl);
 
