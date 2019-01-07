@@ -13,7 +13,7 @@ Using Docker:
 1. install deps `npm install .`
 1. Start the "watch" task: `npm run watch`
 1. Run a local Grafana instance with the development version of the plugin: `docker run -p 3000:3000 -d --name gf-dev --volume $(pwd)/dist:/var/lib/grafana/plugins/erddap-panel grafana/grafana`
-1. Check the logs to see that Grafana has started up: `docker logs -f df-dev`
+1. Check the logs to see that Grafana has started up: `docker logs -f gf-dev`
 1. Open Grafana at http://localhost:3000/
 1. Log in with username "admin" and password "admin"
 1. Create new dashboard and add the plugin

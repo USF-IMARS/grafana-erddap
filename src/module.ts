@@ -87,22 +87,33 @@ class Ctrl extends MetricsPanelCtrl {
         // http://imars-physalis.marine.usf.edu:8080/erddap
 
         // + path to base url (TODO from panel options)
-        constructed_url += '/griddap/' + this.panel.product_id + '.largePng?'
+        constructed_url += '/griddap/' + this.panel.product_id + '.largePng'
 
         // === + query string to url (TODO from panel options)
-        constructed_url += this.panel.variable_id
+        constructed_url += `?${this.panel.variable_id}`
 
-        let time_lat_lon_indicies = ''
         // time
         const fmt = 'YYYY-MM-DDTHH:mm:00[Z]'; // UTC without seconds
         const time = the_moment.format(fmt)
-        time_lat_lon_indicies += '[(' + time + ')]'
+        constructed_url += `[(${time})]`
         // lat & lon
-        time_lat_lon_indicies += '[(' + this.panel.lat_min + '):(' + this.panel.lat_max + ')]'
-        time_lat_lon_indicies += '[(' + this.panel.lon_min + '):(' + this.panel.lon_max + ')]'
-        constructed_url += time_lat_lon_indicies //+ ',mask' + time_lat_lon_indicies
-        constructed_url += '&.draw=surface&.vars=longitude%7Clatitude%7C' + this.panel.variable_id + '&.colorBar=%7C%7C%7C%7C%7C&.bgColor=0xffccccff'
+        constructed_url += `[(${this.panel.lat_min}):(${this.panel.lat_max})]`
+        constructed_url += `[(${this.panel.lon_min}):(${this.panel.lon_max})]`
+
+        // TODO: + this.encodeData()
+        constructed_url += '&' + this.encodeData({
+            '.draw':'surface',
+            '.vars':'longitude|latitude|' + this.panel.variable_id,
+            '.colorBar':'|||||',
+            '.bgColor':'0xffccccff',
+        })
         return constructed_url
+    }
+
+    encodeData(data) {
+        return Object.keys(data).map(function(key) {
+            return [key, data[key]].map(encodeURIComponent).join("=");
+        }).join("&");
     }
 
     onInitEditMode() {
