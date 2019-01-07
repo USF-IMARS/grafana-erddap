@@ -13,7 +13,7 @@ Using Docker:
 1. install deps `npm install .`
 1. Start the "watch" task: `npm run watch`
 1. Run a local Grafana instance with the development version of the plugin: `docker run -p 3000:3000 -d --name gf-dev --volume $(pwd)/dist:/var/lib/grafana/plugins/erddap-panel grafana/grafana`
-1. Check the logs to see that Grafana has started up: `docker logs -f df-dev`
+1. Check the logs to see that Grafana has started up: `docker logs -f gf-dev`
 1. Open Grafana at http://localhost:3000/
 1. Log in with username "admin" and password "admin"
 1. Create new dashboard and add the plugin
@@ -29,6 +29,10 @@ Using Docker:
 The `prod` branch is special; it contains only the output normally in `/dist`.
 Do not try to merge to this branch as you normally would.
 Instead you must copy a build into it manually.
+Before doing so update the version numbers & changelogs at:
+* ./README.md # Changelog
+* ./package.json : version
+* ./src/plugin.json : version
 
 steps:
 1. build the latest master version into `./dist`
@@ -39,6 +43,11 @@ steps:
 1. `git commit` to the `prod` branch
 
 #### Changelog
+##### v0.3.0
+- + custom color bar formatting
+- color bar separated out from images
+- images auto-cropped
+
 ##### v0.2.0
 - + time delta to editor
 - other minor panel editor improvements

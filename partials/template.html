@@ -5,7 +5,13 @@ url: {{url}} <br> -->
         <!-- url: {{url}} <br> -->
         <a
             href="{{url}}"
-            ng-repeat="url in constructed_urls"
+            ng-repeat="url in ctrl.constructed_urls"
             target="_blank"
         ><img class="erddap-img" ng-src="{{url}}" width="{{img_width}}%"/></a>
+</div>
+<div >
+    <p>
+        <img ng-src="{{ctrl.legend_url}}"/>
+        data source: <a href="{{ctrl.panel.url}}/griddap/{{ctrl.panel.product_id}}.graph">{{ctrl.panel.url}}</a>
+    </p>
 </div>

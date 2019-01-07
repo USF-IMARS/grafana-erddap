@@ -803,7 +803,9 @@ function (_super) {
       lon_min: -84,
       lon_max: -79.5,
       delta: 1,
-      delta_unit: 'weeks'
+      delta_unit: 'weeks',
+      color_bar_str: '|||||',
+      bg_color: '0xffccccff'
     };
 
     _lodash2.default.defaults(_this.panel, _this.panelDefaults);
@@ -843,6 +845,7 @@ function (_super) {
 
   Ctrl.prototype.build_urls = function () {
     this.updateTimeRange();
+    this.build_legend_url();
     var t_0 = this.range.from.utc();
     var t_f = this.range.to.utc();
     var time = t_0;
@@ -877,22 +880,62 @@ function (_super) {
     // http://imars-physalis.marine.usf.edu:8080/erddap
     // + path to base url (TODO from panel options)
 
-    constructed_url += '/griddap/' + this.panel.product_id + '.largePng?'; // === + query string to url (TODO from panel options)
+    constructed_url += '/griddap/' + this.panel.product_id + '.largePng'; // === + query string to url (TODO from panel options)
 
-    constructed_url += this.panel.variable_id;
-    var time_lat_lon_indicies = ''; // time
+    constructed_url += "?" + this.panel.variable_id; // time
 
     var fmt = 'YYYY-MM-DDTHH:mm:00[Z]'; // UTC without seconds
 
     var time = the_moment.format(fmt);
-    time_lat_lon_indicies += '[(' + time + ')]'; // lat & lon
+    constructed_url += "[(" + time + ")]"; // lat & lon
 
-    time_lat_lon_indicies += '[(' + this.panel.lat_min + '):(' + this.panel.lat_max + ')]';
-    time_lat_lon_indicies += '[(' + this.panel.lon_min + '):(' + this.panel.lon_max + ')]';
-    constructed_url += time_lat_lon_indicies; //+ ',mask' + time_lat_lon_indicies
+    constructed_url += "[(" + this.panel.lat_min + "):(" + this.panel.lat_max + ")]";
+    constructed_url += "[(" + this.panel.lon_min + "):(" + this.panel.lon_max + ")]"; // TODO: + this.encodeData()
 
-    constructed_url += '&.draw=surface&.vars=longitude%7Clatitude%7C' + this.panel.variable_id + '&.colorBar=%7C%7C%7C%7C%7C&.bgColor=0xffccccff';
+    constructed_url += '&' + this.encodeData({
+      '.draw': 'surface',
+      '.vars': 'longitude|latitude|' + this.panel.variable_id,
+      '.colorBar': this.panel.color_bar_str,
+      '.bgColor': this.panel.bg_color,
+      '.trim': '1',
+      '.legend': 'Off'
+    });
     return constructed_url;
+  };
+
+  Ctrl.prototype.build_legend_url = function () {
+    var the_moment = this.range.from.utc();
+    var constructed_url = this.panel.url; // https://coastwatch.pfeg.noaa.gov/erddap
+    // http://imars-physalis.marine.usf.edu:8080/erddap
+    // + path to base url (TODO from panel options)
+
+    constructed_url += '/griddap/' + this.panel.product_id + '.largePng'; // === + query string to url (TODO from panel options)
+
+    constructed_url += "?" + this.panel.variable_id; // time
+
+    var fmt = 'YYYY-MM-DDTHH:mm:00[Z]'; // UTC without seconds
+
+    var time = the_moment.format(fmt);
+    constructed_url += "[(" + time + ")]"; // lat & lon
+
+    constructed_url += "[(" + this.panel.lat_min + "):(" + this.panel.lat_max + ")]";
+    constructed_url += "[(" + this.panel.lon_min + "):(" + this.panel.lon_max + ")]"; // TODO: + this.encodeData()
+
+    constructed_url += '&' + this.encodeData({
+      '.draw': 'surface',
+      '.vars': 'longitude|latitude|' + this.panel.variable_id,
+      '.colorBar': this.panel.color_bar_str,
+      '.bgColor': this.panel.bg_color,
+      '.trim': '0',
+      '.legend': 'Only'
+    });
+    this.legend_url = constructed_url;
+  };
+
+  Ctrl.prototype.encodeData = function (data) {
+    return Object.keys(data).map(function (key) {
+      return [key, data[key]].map(encodeURIComponent).join("=");
+    }).join("&");
   };
 
   Ctrl.prototype.onInitEditMode = function () {

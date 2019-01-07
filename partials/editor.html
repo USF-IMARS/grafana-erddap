@@ -119,6 +119,17 @@
                 </info-popover>
             </div>
         </div>
+        <div class="gf-form">
+            <div>
+                <span class="gf-form-label">colorBar format string</span>
+            </div>
+            <input
+                type="text" class="gf-form-input width-40"
+                ng-model="ctrl.panel.color_bar_str"
+                ng-change="ctrl.refresh()"
+                ng-model-onblur
+            />
+        </div>
     </div>  <!-- /section group -->
     <div class="section gf-form-group">
         NOTE: "Metrics" tab is non-functional for this panel.
