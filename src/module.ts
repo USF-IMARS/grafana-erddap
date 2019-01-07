@@ -5,13 +5,15 @@ import _ from 'lodash';
 class Ctrl extends MetricsPanelCtrl {
     static templateUrl = "partials/template.html";
     static MAX_IMAGES = 30;
+
     public constructed_urls = [] as string[];
-    public _panelPath = 'undefined'
-    public img_width = 100.0
-    public panel: any;
+    public legend_url:string;
+    public _panelPath:string = 'undefined';
+    public img_width:number = 100.0;
+    public panel:any;
 
     // Set and populate defaults
-    panelDefaults = {
+    public panelDefaults = {
         url: "http://imars-physalis:8080/erddap",
         product_id: 'jplMURSST41anom1day',
         variable_id: 'sstAnom',
@@ -54,6 +56,8 @@ class Ctrl extends MetricsPanelCtrl {
 
     build_urls(){
         this.updateTimeRange()
+        this.build_legend_url()
+
         const t_0 = this.range.from.utc()
         const t_f = this.range.to.utc()
         let time = t_0
@@ -110,6 +114,38 @@ class Ctrl extends MetricsPanelCtrl {
             '.legend': 'Off',
         })
         return constructed_url
+    }
+
+    build_legend_url(){
+        const the_moment = this.range.from.utc();
+        let constructed_url = this.panel.url;
+        // https://coastwatch.pfeg.noaa.gov/erddap
+        // http://imars-physalis.marine.usf.edu:8080/erddap
+
+        // + path to base url (TODO from panel options)
+        constructed_url += '/griddap/' + this.panel.product_id + '.largePng'
+
+        // === + query string to url (TODO from panel options)
+        constructed_url += `?${this.panel.variable_id}`
+
+        // time
+        const fmt = 'YYYY-MM-DDTHH:mm:00[Z]'; // UTC without seconds
+        const time = the_moment.format(fmt)
+        constructed_url += `[(${time})]`
+        // lat & lon
+        constructed_url += `[(${this.panel.lat_min}):(${this.panel.lat_max})]`
+        constructed_url += `[(${this.panel.lon_min}):(${this.panel.lon_max})]`
+
+        // TODO: + this.encodeData()
+        constructed_url += '&' + this.encodeData({
+            '.draw':'surface',
+            '.vars':'longitude|latitude|' + this.panel.variable_id,
+            '.colorBar':'|||||',
+            '.bgColor':'0xffccccff',
+            '.trim': '0',
+            '.legend': 'Only',
+        })
+        this.legend_url = constructed_url
     }
 
     encodeData(data) {
