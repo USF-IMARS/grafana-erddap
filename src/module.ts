@@ -106,6 +106,8 @@ class Ctrl extends MetricsPanelCtrl {
             '.vars':'longitude|latitude|' + this.panel.variable_id,
             '.colorBar':'|||||',
             '.bgColor':'0xffccccff',
+            '.trim': '1',
+            '.legend': 'Off',
         })
         return constructed_url
     }
