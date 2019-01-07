@@ -3,22 +3,22 @@
     "name": "ERDDAP Panel",
     "id": "erddap-panel",
     "info": {
-    "description": "Read in ERDDAP data",
-    "author": {
-        "name": "USF IMaRS (Tylar Murray)",
-        "url": "http://imars.marine.usf.edu/"
-    },
-    "logos": {
-        "small": "img/small_logo.png",
-        "large": "img/large_logo.png"
-    },
-    "links": [
-        {"name": "Project Page", "url": "https://github.com/USF-IMARS/grafana-erddap"}
-    ],
-    "screenshots": [
-        { "name": "Example",  "path": "img/screenshot-1.png" }
-    ],
-        "version": "0.2.0",
-        "updated": "2018-12-19"
+        "description": "Read in ERDDAP data",
+        "author": {
+            "name": "USF IMaRS (Tylar Murray)",
+            "url": "http://imars.marine.usf.edu/"
+        },
+        "logos": {
+            "small": "img/small_logo.png",
+            "large": "img/large_logo.png"
+        },
+        "links": [
+            {"name": "Project Page", "url": "https://github.com/USF-IMARS/grafana-erddap"}
+        ],
+        "screenshots": [
+            { "name": "Example",  "path": "img/screenshot-1.png" }
+        ],
+        "version": "0.3.0",
+        "updated": "2019-01-07"
     }
 }

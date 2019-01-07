@@ -29,6 +29,10 @@ Using Docker:
 The `prod` branch is special; it contains only the output normally in `/dist`.
 Do not try to merge to this branch as you normally would.
 Instead you must copy a build into it manually.
+Before doing so update the version numbers & changelogs at:
+* ./README.md # Changelog
+* ./package.json : version
+* ./src/plugin.json : version
 
 steps:
 1. build the latest master version into `./dist`
@@ -39,6 +43,11 @@ steps:
 1. `git commit` to the `prod` branch
 
 #### Changelog
+##### v0.3.0
+- + custom color bar formatting
+- color bar separated out from images
+- images auto-cropped
+
 ##### v0.2.0
 - + time delta to editor
 - other minor panel editor improvements
