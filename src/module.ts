@@ -22,7 +22,9 @@ class Ctrl extends MetricsPanelCtrl {
         lon_min: -84,
         lon_max: -79.5,
         delta: 1,
-        delta_unit: 'weeks'
+        delta_unit: 'weeks',
+        color_bar_str: '|||||',
+        bg_color: '0xffccccff'
     };
 
     constructor($scope, $injector) {
@@ -108,8 +110,8 @@ class Ctrl extends MetricsPanelCtrl {
         constructed_url += '&' + this.encodeData({
             '.draw':'surface',
             '.vars':'longitude|latitude|' + this.panel.variable_id,
-            '.colorBar':'|||||',
-            '.bgColor':'0xffccccff',
+            '.colorBar': this.panel.color_bar_str,
+            '.bgColor': this.panel.bg_color,
             '.trim': '1',
             '.legend': 'Off',
         })
@@ -140,8 +142,8 @@ class Ctrl extends MetricsPanelCtrl {
         constructed_url += '&' + this.encodeData({
             '.draw':'surface',
             '.vars':'longitude|latitude|' + this.panel.variable_id,
-            '.colorBar':'|||||',
-            '.bgColor':'0xffccccff',
+            '.colorBar': this.panel.color_bar_str,
+            '.bgColor': this.panel.bg_color,
             '.trim': '0',
             '.legend': 'Only',
         })
