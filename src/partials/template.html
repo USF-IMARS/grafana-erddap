@@ -7,7 +7,10 @@ url: {{url}} <br> -->
             href="{{url}}"
             ng-repeat="url in ctrl.constructed_urls"
             target="_blank"
-        ><img class="erddap-img" ng-src="{{url}}" width="{{ctrl.img_width}}%"/></a>
+        ><img class="erddap-img"
+            ng-src="{{url}}"
+            title="{{ url.split('(')[1].split(')')[0] }}"
+            width="{{ctrl.img_width}}%"/></a>
 </div>
 <div >
     <img ng-src="{{ctrl.legend_url}}"/>
