@@ -43,6 +43,11 @@ steps:
 1. `git commit` to the `prod` branch
 
 #### Changelog
+##### v0.5.0
+- + image date to image title
+- + image date table above images
+- better layout of legend
+
 ##### v0.4.0
 - automatic time delta using n-images setting (#2)
 - fixes modified this.range side-effect
