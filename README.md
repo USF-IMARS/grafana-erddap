@@ -45,7 +45,6 @@ steps:
 #### Changelog
 ##### v0.4.0
 - automatic time delta using n-images setting (#2)
-- lat & lon combined into one variable string
 - fixes modified this.range side-effect
 - colorbar request now uses middle of this.range
 - data credit links to data request instead of graph
