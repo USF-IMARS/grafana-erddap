@@ -1,4 +1,4 @@
-define(["app/plugins/sdk","lodash"], function(__WEBPACK_EXTERNAL_MODULE_grafana_app_plugins_sdk__, __WEBPACK_EXTERNAL_MODULE_lodash__) { return /******/ (function(modules) { // webpackBootstrap
+define(["app/plugins/sdk","lodash","moment"], function(__WEBPACK_EXTERNAL_MODULE_grafana_app_plugins_sdk__, __WEBPACK_EXTERNAL_MODULE_lodash__, __WEBPACK_EXTERNAL_MODULE_moment__) { return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 /******/
@@ -754,6 +754,10 @@ var _lodash = __webpack_require__(/*! lodash */ "lodash");
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
+var _moment = __webpack_require__(/*! moment */ "moment");
+
+var _moment2 = _interopRequireDefault(_moment);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var __extends = undefined && undefined.__extends || function () {
@@ -805,7 +809,8 @@ function (_super) {
       delta: 1,
       delta_unit: 'weeks',
       color_bar_str: '|||||',
-      bg_color: '0xffccccff'
+      bg_color: '0xffccccff',
+      n_images: 7
     };
 
     _lodash2.default.defaults(_this.panel, _this.panelDefaults);
@@ -843,34 +848,43 @@ function (_super) {
     configurable: true
   });
 
-  Ctrl.prototype.build_urls = function () {
-    this.updateTimeRange();
-    this.build_legend_url();
+  Ctrl.prototype.fill_image_urls = function () {
+    // Fills this.range to create image URLs at interval defined by
+    // this.panel.delta & this.panel.delta_unit
     var t_0 = this.range.from.utc();
     var t_f = this.range.to.utc();
-    var time = t_0;
-    var url_list = [];
+    var time = (0, _moment2.default)(t_0);
+    this.constructed_urls = [];
 
     while (time.isBefore(t_f)) {
       // console.log(time)
       // TODO: check if image at url is already in url_list
       //       if it is push placeholder instead for more info
       //       see USF-IMARS/grafana-erddap#3
-      url_list.push(this.get_url(time)); // console.log(`+ ${this.panel.delta} ${this.panel.delta_unit}(s)`)
+      this.constructed_urls.push(this.get_url(time)); // console.log(`+ ${this.panel.delta} ${this.panel.delta_unit}(s)`)
 
       time = time.add(this.panel.delta, this.panel.delta_unit);
 
-      if (url_list.length > Ctrl.MAX_IMAGES) {
+      if (this.constructed_urls.length > Ctrl.MAX_IMAGES) {
         throw "loading too many images (> " + Ctrl.MAX_IMAGES + ")"; // TODO: put this in the UI somewhere?
       }
     }
+  };
 
-    this.constructed_urls = url_list; // console.log('urls:', this.constructed_urls)
+  Ctrl.prototype.build_urls = function () {
+    this.updateTimeRange();
+    this.build_legend_url();
+    var t_0 = this.range.from.utc();
+    var t_f = this.range.to.utc(); // compute diff in ms
 
-    var n_images = this.constructed_urls.length;
-    this.img_width = Math.floor(1.0 / n_images * 100.0);
-    this.$scope.constructed_urls = url_list;
-    this.$scope.img_width = this.img_width;
+    var diffInMs = Math.abs(t_0.diff(t_f)); // time delta in ms
+
+    var delta_ms = diffInMs / this.panel.n_images;
+    this.panel.delta = delta_ms;
+    this.panel.delta_unit = 'ms';
+    this.fill_image_urls(); // console.log('urls:', this.constructed_urls)
+
+    this.img_width = Math.floor(1.0 / this.panel.n_images * 100.0);
   };
 
   Ctrl.prototype.get_url = function (the_moment) {
@@ -884,9 +898,7 @@ function (_super) {
 
     constructed_url += "?" + this.panel.variable_id; // time
 
-    var fmt = 'YYYY-MM-DDTHH:mm:00[Z]'; // UTC without seconds
-
-    var time = the_moment.format(fmt);
+    var time = this.erddap_fmt_momentjs(the_moment);
     constructed_url += "[(" + time + ")]"; // lat & lon
 
     constructed_url += "[(" + this.panel.lat_min + "):(" + this.panel.lat_max + ")]";
@@ -903,8 +915,21 @@ function (_super) {
     return constructed_url;
   };
 
+  Ctrl.prototype.erddap_fmt_momentjs = function (the_moment) {
+    // convert moment.js moment into ERDDAP time string
+    var fmt = 'YYYY-MM-DDTHH:mm:00[Z]'; // UTC without seconds
+
+    return the_moment.format(fmt);
+  };
+
   Ctrl.prototype.build_legend_url = function () {
-    var the_moment = this.range.from.utc();
+    // use middle of time range to reduce chance of OoBounds errors
+    var t_0 = this.range.from.utc();
+    var t_f = this.range.to.utc();
+    var diff = Math.abs(t_0.diff(t_f));
+    diff = diff / 2;
+    var the_moment = (0, _moment2.default)(t_0);
+    the_moment.add(diff, 'ms');
     var constructed_url = this.panel.url; // https://coastwatch.pfeg.noaa.gov/erddap
     // http://imars-physalis.marine.usf.edu:8080/erddap
     // + path to base url (TODO from panel options)
@@ -913,9 +938,7 @@ function (_super) {
 
     constructed_url += "?" + this.panel.variable_id; // time
 
-    var fmt = 'YYYY-MM-DDTHH:mm:00[Z]'; // UTC without seconds
-
-    var time = the_moment.format(fmt);
+    var time = this.erddap_fmt_momentjs(the_moment);
     constructed_url += "[(" + time + ")]"; // lat & lon
 
     constructed_url += "[(" + this.panel.lat_min + "):(" + this.panel.lat_max + ")]";
@@ -971,6 +994,17 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_grafana_app_plugins_sdk__;
 /***/ (function(module, exports) {
 
 module.exports = __WEBPACK_EXTERNAL_MODULE_lodash__;
+
+/***/ }),
+
+/***/ "moment":
+/*!*************************!*\
+  !*** external "moment" ***!
+  \*************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE_moment__;
 
 /***/ })
 

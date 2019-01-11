@@ -43,6 +43,12 @@ steps:
 1. `git commit` to the `prod` branch
 
 #### Changelog
+##### v0.4.0
+- automatic time delta using n-images setting (#2)
+- fixes modified this.range side-effect
+- colorbar request now uses middle of this.range
+- data credit links to data request instead of graph
+
 ##### v0.3.0
 - + custom color bar formatting
 - color bar separated out from images
