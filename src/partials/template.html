@@ -1,6 +1,15 @@
 <!-- urls: {{constructed_urls}} <br>
 url: {{constructed_urls[0]}} <br>
 url: {{url}} <br> -->
+<table style="width:100%">
+    <tr>
+        <td
+        ng-repeat="url in ctrl.constructed_urls"
+        width="{{ctrl.img_width}}%"
+
+        >{{ url.split('(')[1].split(')')[0] }}</td>
+    </tr>
+</table>
 <div class="erddap-img-row">
         <!-- url: {{url}} <br> -->
         <a
