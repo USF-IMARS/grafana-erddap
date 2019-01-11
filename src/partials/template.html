@@ -12,9 +12,15 @@ url: {{url}} <br> -->
             title="{{ url.split('(')[1].split(')')[0] }}"
             width="{{ctrl.img_width}}%"/></a>
 </div>
-<div >
-    <img ng-src="{{ctrl.legend_url}}"/>
-    <p>
-        data source: <a href="{{ctrl.panel.url}}/griddap/{{ctrl.panel.product_id}}.html">{{ctrl.panel.url}}</a>
-    </p>
+<div class="row">
+    <div>
+        <img ng-src="{{ctrl.legend_url}}"/>
+    </div>
+    <div>
+        <p>
+            <br>
+            data source: <br>
+            <a href="{{ctrl.panel.url}}/griddap/{{ctrl.panel.product_id}}.html">{{ctrl.panel.url}}</a>
+        </p>
+    </div>
 </div>
