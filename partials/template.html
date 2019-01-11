@@ -1,17 +1,35 @@
 <!-- urls: {{constructed_urls}} <br>
 url: {{constructed_urls[0]}} <br>
 url: {{url}} <br> -->
+<table style="width:100%">
+    <tr>
+        <td
+        ng-repeat="url in ctrl.constructed_urls"
+        width="{{ctrl.img_width}}%"
+
+        >{{ url.split('(')[1].split(')')[0] }}</td>
+    </tr>
+</table>
 <div class="erddap-img-row">
         <!-- url: {{url}} <br> -->
         <a
             href="{{url}}"
             ng-repeat="url in ctrl.constructed_urls"
             target="_blank"
-        ><img class="erddap-img" ng-src="{{url}}" width="{{ctrl.img_width}}%"/></a>
+        ><img class="erddap-img"
+            ng-src="{{url}}"
+            title="{{ url.split('(')[1].split(')')[0] }}"
+            width="{{ctrl.img_width}}%"/></a>
 </div>
-<div >
-    <img ng-src="{{ctrl.legend_url}}"/>
-    <p>
-        data source: <a href="{{ctrl.panel.url}}/griddap/{{ctrl.panel.product_id}}.html">{{ctrl.panel.url}}</a>
-    </p>
+<div class="row">
+    <div>
+        <img ng-src="{{ctrl.legend_url}}"/>
+    </div>
+    <div>
+        <p>
+            <br>
+            data source: <br>
+            <a href="{{ctrl.panel.url}}/griddap/{{ctrl.panel.product_id}}.html">{{ctrl.panel.url}}</a>
+        </p>
+    </div>
 </div>
