@@ -1,5 +1,7 @@
 ## ERDDAP Panel for Grafana
 
+![screenshot](https://raw.githubusercontent.com/USF-IMARS/grafana-erddap/master/src/img/screenshot-1.png)
+
 ### Installation
 1. cd to your grafana plugin dir `cd /var/lib/grafana/plugins/`
 1. clone repo `git clone https://github.com/USF-IMARS/grafana-erddap --branch prod ./erddap-panel`
