@@ -3,11 +3,16 @@ import './css/panel.base.css';
 import _ from 'lodash';
 import moment from 'moment';
 
+class ERDDAPURL {
+    public display:string;
+    public link:string;
+    public request_time:string;
+}
+
 class Ctrl extends MetricsPanelCtrl {
     static templateUrl = "partials/template.html";
     static MAX_IMAGES = 30;
 
-    public constructed_urls = [] as string[];
     public legend_url:string;
     public _panelPath:string = 'undefined';
     public img_width:number = 100.0;
@@ -15,7 +20,7 @@ class Ctrl extends MetricsPanelCtrl {
 
     // Set and populate defaults
     public panelDefaults = {
-        url: "http://imars-physalis:8080/erddap",
+        base_url: "http://imars-physalis:8080/erddap",
         product_id: 'jplMURSST41anom1day',
         variable_id: 'sstAnom',
         lat_min: 23.5,
@@ -26,7 +31,8 @@ class Ctrl extends MetricsPanelCtrl {
         delta_unit: 'weeks',
         color_bar_str: '|||||',
         bg_color: '0xffccccff',
-        n_images: 7
+        n_images: 7,
+        colorbar_display: 'individual'  // 'unified'
     };
 
     constructor($scope, $injector) {
@@ -61,19 +67,31 @@ class Ctrl extends MetricsPanelCtrl {
     fill_image_urls(){
         // Fills this.range to create image URLs at interval defined by
         // this.panel.delta & this.panel.delta_unit
+        // A rough image width estimate to use for erddap requests.
+        // This estimate is likely to be slightly too large.
+        const width_est = window.screen.width * this.img_width;
         const t_0 = this.range.from.utc()
         const t_f = this.range.to.utc()
         let time = moment(t_0)
-        this.constructed_urls = [] as string[];
+        this.panel.urls = [];
         while (time.isBefore(t_f)){
+            let this_url = new ERDDAPURL();
+            if (this.panel.colorbar_display=='individual'){
+                this_url.display = this.get_url(time, 'Bottom', 'png', width_est+'|')
+            } else {
+                this_url.display = this.get_url(time, 'Off', 'png', width_est+'|')
+            }
+            this_url.link = this.get_url(time, 'Bottom', 'largePng', '|')
+            // TODO: use 'time' here instead of this kludge ?
+            this_url.request_time = this_url.display.split('(')[1].split(')')[0]
             // console.log(time)
             // TODO: check if image at url is already in url_list
             //       if it is push placeholder instead for more info
             //       see USF-IMARS/grafana-erddap#3
-            this.constructed_urls.push(this.get_url(time))
+            this.panel.urls.push(this_url)
             // console.log(`+ ${this.panel.delta} ${this.panel.delta_unit}(s)`)
             time = time.add(this.panel.delta, this.panel.delta_unit)
-            if (this.constructed_urls.length > Ctrl.MAX_IMAGES){
+            if (this.panel.urls.length > Ctrl.MAX_IMAGES){
                 throw `loading too many images (> ${Ctrl.MAX_IMAGES})`
                 // TODO: put this in the UI somewhere?
             }
@@ -96,19 +114,19 @@ class Ctrl extends MetricsPanelCtrl {
 
         this.fill_image_urls()
 
-        // console.log('urls:', this.constructed_urls)
+        // console.log('urls:', this.urls_display)
         this.img_width = Math.floor(1.0 / this.panel.n_images * 100.0)
     }
 
-    get_url(the_moment){
+    get_url(the_moment, legend, format, size_str){
         // const t_0 = this.range.from.utc().format(fmt);
         // const t_f = this.range.to.utc().format(fmt);
-        let constructed_url = this.panel.url;
+        let constructed_url = this.panel.base_url;
         // https://coastwatch.pfeg.noaa.gov/erddap
         // http://imars-physalis.marine.usf.edu:8080/erddap
 
         // + path to base url (TODO from panel options)
-        constructed_url += '/griddap/' + this.panel.product_id + '.largePng'
+        constructed_url += '/griddap/' + this.panel.product_id + '.' + format
 
         // === + query string to url (TODO from panel options)
         constructed_url += `?${this.panel.variable_id}`
@@ -127,7 +145,8 @@ class Ctrl extends MetricsPanelCtrl {
             '.colorBar': this.panel.color_bar_str,
             '.bgColor': this.panel.bg_color,
             '.trim': '1',
-            '.legend': 'Off',
+            '.legend': legend,
+            '.size': size_str
         })
         return constructed_url
     }
@@ -147,7 +166,10 @@ class Ctrl extends MetricsPanelCtrl {
         var the_moment = moment(t_0);
         the_moment.add(diff, 'ms');
 
-        let constructed_url = this.panel.url;
+        // TODO: I think all below here can be replaced with:
+        // this.legend_url = this.get_url(the_moment, 'Only', 'largePng', '|')
+
+        let constructed_url = this.panel.base_url;
         // https://coastwatch.pfeg.noaa.gov/erddap
         // http://imars-physalis.marine.usf.edu:8080/erddap
 
