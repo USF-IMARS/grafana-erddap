@@ -32,7 +32,8 @@ class Ctrl extends MetricsPanelCtrl {
         color_bar_str: '|||||',
         bg_color: '0xffccccff',
         n_images: 7,
-        colorbar_display: 'individual'  // 'unified'
+        colorbar_display: 'individual',  // 'unified'
+        show_request_dates: false
     };
 
     constructor($scope, $injector) {

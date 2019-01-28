@@ -124,6 +124,20 @@
                 ng-change="ctrl.refresh()"
             />
         </div>
+        <div class="gf-form-inline">
+          <div class="gf-form max-width-15">
+            <span class="gf-form-label width-10">Show Request Dates</span>
+            <input
+                type="checkbox"
+                class="gf-form-input"
+                ng-model="ctrl.panel.show_request_dates"
+                ng-change="ctrl.refresh()"
+            ></input>
+            <info-popover mode="right-absolute">
+                Show the date sent to the ERDDAP server in table above images.
+            </info-popover>
+          </div>
+        </div>
     </div>  <!-- /section group -->
     <div class="section gf-form-group">
         NOTE: "Metrics" tab is non-functional for this panel.
