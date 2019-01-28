@@ -21,15 +21,12 @@ url: {{url}} <br> -->
             title="{{ url.request_time }}"
             width="{{ctrl.img_width}}%"/></a>
 </div>
-<div class="row">
-    <div ng-if="ctrl.panel.colorbar_display=='unified'">
-        <img ng-src="{{ctrl.legend_url}}"/>
-    </div>
-    <div>
-        <p>
-            <br>
-            data source: <br>
-            <a href="{{ctrl.panel.url}}/griddap/{{ctrl.panel.product_id}}.html">{{ctrl.panel.url}}</a>
-        </p>
-    </div>
+
+<div ng-if="ctrl.panel.colorbar_display=='unified'">
+    <a href="{{ctrl.panel.url}}/griddap/{{ctrl.panel.product_id}}.html">
+        <img ng-src="{{ctrl.legend_url}}"
+            title="click for for data access options & metadata."
+            target="_blank"
+        />
+    </a>
 </div>

@@ -45,6 +45,12 @@ steps:
 1. `git commit` to the `prod` branch
 
 #### Changelog
+##### v0.6.0
+- centered image date
+- colorbar key can now be "unified" or "individual"
+- fixes #7
+- data link included under unified colorbar
+
 ##### v0.5.0
 - + image date to image title
 - + image date table above images
