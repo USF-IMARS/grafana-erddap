@@ -69,6 +69,7 @@ class Ctrl extends MetricsPanelCtrl {
         // this.panel.delta & this.panel.delta_unit
         // A rough image width estimate to use for erddap requests.
         // This estimate is likely to be slightly too large.
+        const dt_display_fmt = 'dddd, MMM Do';
         const width_est = window.screen.width * this.img_width;
         const t_0 = this.range.from.utc()
         const t_f = this.range.to.utc()
@@ -83,7 +84,7 @@ class Ctrl extends MetricsPanelCtrl {
             }
             this_url.link = this.get_url(time, 'Bottom', 'largePng', '|')
             // TODO: use 'time' here instead of this kludge ?
-            this_url.request_time = this_url.display.split('(')[1].split(')')[0]
+            this_url.request_time = time.format(dt_display_fmt);
             // console.log(time)
             // TODO: check if image at url is already in url_list
             //       if it is push placeholder instead for more info
