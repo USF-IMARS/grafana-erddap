@@ -786,6 +786,14 @@ var __extends = undefined && undefined.__extends || function () {
   };
 }();
 
+var ERDDAPURL =
+/** @class */
+function () {
+  function ERDDAPURL() {}
+
+  return ERDDAPURL;
+}();
+
 var Ctrl =
 /** @class */
 function (_super) {
@@ -794,12 +802,11 @@ function (_super) {
   function Ctrl($scope, $injector) {
     var _this = _super.call(this, $scope, $injector) || this;
 
-    _this.constructed_urls = [];
     _this._panelPath = 'undefined';
     _this.img_width = 100.0; // Set and populate defaults
 
     _this.panelDefaults = {
-      url: "http://imars-physalis:8080/erddap",
+      base_url: "http://imars-physalis:8080/erddap",
       product_id: 'jplMURSST41anom1day',
       variable_id: 'sstAnom',
       lat_min: 23.5,
@@ -810,7 +817,9 @@ function (_super) {
       delta_unit: 'weeks',
       color_bar_str: '|||||',
       bg_color: '0xffccccff',
-      n_images: 7
+      n_images: 7,
+      colorbar_display: 'individual' // 'unified'
+
     };
 
     _lodash2.default.defaults(_this.panel, _this.panelDefaults);
@@ -851,21 +860,36 @@ function (_super) {
   Ctrl.prototype.fill_image_urls = function () {
     // Fills this.range to create image URLs at interval defined by
     // this.panel.delta & this.panel.delta_unit
+    // A rough image width estimate to use for erddap requests.
+    // This estimate is likely to be slightly too large.
+    var dt_display_fmt = 'dddd, MMM Do';
+    var width_est = window.screen.width * this.img_width;
     var t_0 = this.range.from.utc();
     var t_f = this.range.to.utc();
     var time = (0, _moment2.default)(t_0);
-    this.constructed_urls = [];
+    this.panel.urls = [];
 
     while (time.isBefore(t_f)) {
-      // console.log(time)
+      var this_url = new ERDDAPURL();
+
+      if (this.panel.colorbar_display == 'individual') {
+        this_url.display = this.get_url(time, 'Bottom', 'png', width_est + '|');
+      } else {
+        this_url.display = this.get_url(time, 'Off', 'png', width_est + '|');
+      }
+
+      this_url.link = this.get_url(time, 'Bottom', 'largePng', '|'); // TODO: use 'time' here instead of this kludge ?
+
+      this_url.request_time = time.format(dt_display_fmt); // console.log(time)
       // TODO: check if image at url is already in url_list
       //       if it is push placeholder instead for more info
       //       see USF-IMARS/grafana-erddap#3
-      this.constructed_urls.push(this.get_url(time)); // console.log(`+ ${this.panel.delta} ${this.panel.delta_unit}(s)`)
+
+      this.panel.urls.push(this_url); // console.log(`+ ${this.panel.delta} ${this.panel.delta_unit}(s)`)
 
       time = time.add(this.panel.delta, this.panel.delta_unit);
 
-      if (this.constructed_urls.length > Ctrl.MAX_IMAGES) {
+      if (this.panel.urls.length > Ctrl.MAX_IMAGES) {
         throw "loading too many images (> " + Ctrl.MAX_IMAGES + ")"; // TODO: put this in the UI somewhere?
       }
     }
@@ -879,22 +903,22 @@ function (_super) {
 
     var diffInMs = Math.abs(t_0.diff(t_f)); // time delta in ms
 
-    var delta_ms = diffInMs / this.panel.n_images;
+    var delta_ms = Math.ceil(diffInMs / this.panel.n_images);
     this.panel.delta = delta_ms;
     this.panel.delta_unit = 'ms';
-    this.fill_image_urls(); // console.log('urls:', this.constructed_urls)
+    this.fill_image_urls(); // console.log('urls:', this.urls_display)
 
     this.img_width = Math.floor(1.0 / this.panel.n_images * 100.0);
   };
 
-  Ctrl.prototype.get_url = function (the_moment) {
+  Ctrl.prototype.get_url = function (the_moment, legend, format, size_str) {
     // const t_0 = this.range.from.utc().format(fmt);
     // const t_f = this.range.to.utc().format(fmt);
-    var constructed_url = this.panel.url; // https://coastwatch.pfeg.noaa.gov/erddap
+    var constructed_url = this.panel.base_url; // https://coastwatch.pfeg.noaa.gov/erddap
     // http://imars-physalis.marine.usf.edu:8080/erddap
     // + path to base url (TODO from panel options)
 
-    constructed_url += '/griddap/' + this.panel.product_id + '.largePng'; // === + query string to url (TODO from panel options)
+    constructed_url += '/griddap/' + this.panel.product_id + '.' + format; // === + query string to url (TODO from panel options)
 
     constructed_url += "?" + this.panel.variable_id; // time
 
@@ -910,7 +934,8 @@ function (_super) {
       '.colorBar': this.panel.color_bar_str,
       '.bgColor': this.panel.bg_color,
       '.trim': '1',
-      '.legend': 'Off'
+      '.legend': legend,
+      '.size': size_str
     });
     return constructed_url;
   };
@@ -929,8 +954,10 @@ function (_super) {
     var diff = Math.abs(t_0.diff(t_f));
     diff = diff / 2;
     var the_moment = (0, _moment2.default)(t_0);
-    the_moment.add(diff, 'ms');
-    var constructed_url = this.panel.url; // https://coastwatch.pfeg.noaa.gov/erddap
+    the_moment.add(diff, 'ms'); // TODO: I think all below here can be replaced with:
+    // this.legend_url = this.get_url(the_moment, 'Only', 'largePng', '|')
+
+    var constructed_url = this.panel.base_url; // https://coastwatch.pfeg.noaa.gov/erddap
     // http://imars-physalis.marine.usf.edu:8080/erddap
     // + path to base url (TODO from panel options)
 

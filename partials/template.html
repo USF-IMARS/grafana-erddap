@@ -1,35 +1,32 @@
-<!-- urls: {{constructed_urls}} <br>
-url: {{constructed_urls[0]}} <br>
+<!-- urls: {{urls_display}} <br>
+url: {{urls_display[0]}} <br>
 url: {{url}} <br> -->
-<table style="width:100%">
+<table style="width:100%; text-align: center;">
     <tr>
         <td
-        ng-repeat="url in ctrl.constructed_urls"
+        ng-repeat="url in ctrl.panel.urls track by url.request_time"
         width="{{ctrl.img_width}}%"
 
-        >{{ url.split('(')[1].split(')')[0] }}</td>
+        >{{ url.request_time }}</td>
     </tr>
 </table>
 <div class="erddap-img-row">
         <!-- url: {{url}} <br> -->
         <a
-            href="{{url}}"
-            ng-repeat="url in ctrl.constructed_urls"
+            href="{{url.link}}"
+            ng-repeat="url in ctrl.panel.urls track by url.request_time"
             target="_blank"
         ><img class="erddap-img"
-            ng-src="{{url}}"
-            title="{{ url.split('(')[1].split(')')[0] }}"
+            ng-src="{{url.display}}"
+            title="{{ url.request_time }}"
             width="{{ctrl.img_width}}%"/></a>
 </div>
-<div class="row">
-    <div>
-        <img ng-src="{{ctrl.legend_url}}"/>
-    </div>
-    <div>
-        <p>
-            <br>
-            data source: <br>
-            <a href="{{ctrl.panel.url}}/griddap/{{ctrl.panel.product_id}}.html">{{ctrl.panel.url}}</a>
-        </p>
-    </div>
+
+<div ng-if="ctrl.panel.colorbar_display=='unified'">
+    <a href="{{ctrl.panel.url}}/griddap/{{ctrl.panel.product_id}}.html">
+        <img ng-src="{{ctrl.legend_url}}"
+            title="click for for data access options & metadata."
+            target="_blank"
+        />
+    </a>
 </div>
