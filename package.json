@@ -1,6 +1,6 @@
 {
   "name": "erddap-panel",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Read in ERDDAP data",
   "main": "src/module.js",
   "scripts": {
