@@ -109,7 +109,9 @@ class Ctrl extends MetricsPanelCtrl {
         // compute diff in ms
         var diffInMs = Math.abs(t_0.diff(t_f));
         // time delta in ms
-        var delta_ms = diffInMs / this.panel.n_images;
+        var delta_ms = Math.ceil(
+            diffInMs / this.panel.n_images
+        );
         this.panel.delta = delta_ms
         this.panel.delta_unit = 'ms'
 
