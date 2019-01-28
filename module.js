@@ -818,8 +818,8 @@ function (_super) {
       color_bar_str: '|||||',
       bg_color: '0xffccccff',
       n_images: 7,
-      colorbar_display: 'individual' // 'unified'
-
+      colorbar_display: 'individual',
+      show_request_dates: false
     };
 
     _lodash2.default.defaults(_this.panel, _this.panelDefaults);

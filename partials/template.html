@@ -1,7 +1,10 @@
 <!-- urls: {{urls_display}} <br>
 url: {{urls_display[0]}} <br>
 url: {{url}} <br> -->
-<table style="width:100%; text-align: center;">
+<table
+    ng-if="ctrl.panel.show_request_dates"
+    style="width:100%; text-align: center;"
+>
     <tr>
         <td
         ng-repeat="url in ctrl.panel.urls track by url.request_time"

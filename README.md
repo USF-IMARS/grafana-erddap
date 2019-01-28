@@ -45,6 +45,9 @@ steps:
 1. `git commit` to the `prod` branch
 
 #### Changelog
+##### v0.6.1
+- make request_date table optional
+
 ##### v0.6.0
 - centered image date
 - colorbar key can now be "unified" or "individual"
