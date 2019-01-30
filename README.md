@@ -45,6 +45,9 @@ steps:
 1. `git commit` to the `prod` branch
 
 #### Changelog
+##### v0.6.2
+- reformat display date
+
 ##### v0.6.1
 - make request_date table optional
 
