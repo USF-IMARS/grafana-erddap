@@ -862,7 +862,6 @@ function (_super) {
     // this.panel.delta & this.panel.delta_unit
     // A rough image width estimate to use for erddap requests.
     // This estimate is likely to be slightly too large.
-    var dt_display_fmt = 'dddd, MMM Do';
     var width_est = window.screen.width * this.img_width;
     var t_0 = this.range.from.utc();
     var t_f = this.range.to.utc();
@@ -880,7 +879,7 @@ function (_super) {
 
       this_url.link = this.get_url(time, 'Bottom', 'largePng', '|'); // TODO: use 'time' here instead of this kludge ?
 
-      this_url.request_time = time.format(dt_display_fmt); // console.log(time)
+      this_url.request_time = time.format(Ctrl.dt_display_fmt); // console.log(time)
       // TODO: check if image at url is already in url_list
       //       if it is push placeholder instead for more info
       //       see USF-IMARS/grafana-erddap#3
@@ -993,6 +992,7 @@ function (_super) {
     this.addEditorTab('ERDDAP Connection', this.panelPath + 'partials/editor.html', 1); // this.addEditorTab('Not-Yet-Implemented', this.panelPath + 'partials/nyi.html', 99);
   };
 
+  Ctrl.dt_display_fmt = 'Do MMM YYYY';
   Ctrl.templateUrl = "partials/template.html";
   Ctrl.MAX_IMAGES = 30;
   return Ctrl;
