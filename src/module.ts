@@ -21,7 +21,7 @@ class Ctrl extends MetricsPanelCtrl {
 
     // Set and populate defaults
     public panelDefaults = {
-        base_url: "http://imars-physalis:8080/erddap",
+        base_url: "http://131.247.136.200:8080/erddap",
         product_id: 'jplMURSST41anom1day',
         variable_id: 'sstAnom',
         lat_min: 23.5,
