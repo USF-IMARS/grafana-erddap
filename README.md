@@ -1,95 +1,125 @@
-## ERDDAP Panel for Grafana
+# Grafana panel plugin template
 
-![screenshot](https://raw.githubusercontent.com/USF-IMARS/grafana-erddap/master/src/img/screenshot-1.png)
+This template is a starting point for building a panel plugin for Grafana.
 
-This [grafana](https://grafana.com/) plugin connects to an [ERDDAP](https://coastwatch.pfeg.noaa.gov/erddap/information.html) server display gridded timeseries data in a dashboard panel.
+## What are Grafana panel plugins?
 
-### Installation
-1. cd to your grafana plugin dir `cd /var/lib/grafana/plugins/`
-1. clone repo `git clone https://github.com/USF-IMARS/grafana-erddap --branch prod ./erddap-panel`
-1. restart grafana `service grafana-server restart`
-1. check if installed: `grafana-cli plugins ls | grep erddap`
-### Development
+Panel plugins allow you to add new types of visualizations to your dashboard, such as maps, clocks, pie charts, lists, and more.
 
-Using Docker:
+Use panel plugins when you want to do things like visualize data returned by data source queries, navigate between dashboards, or control external systems (such as smart home devices).
 
-1. Clone the repository and `cd` to it
-1. install deps `npm install .`
-1. Start the "watch" task: `npm run watch`
-1. Run a local Grafana instance with the development version of the plugin: `docker run -p 3000:3000 -d --name gf-dev --volume $(pwd)/dist:/var/lib/grafana/plugins/erddap-panel grafana/grafana`
-1. Check the logs to see that Grafana has started up: `docker logs -f gf-dev`
-1. Open Grafana at http://localhost:3000/
-1. Log in with username "admin" and password "admin"
-1. Create new dashboard and add the plugin
+## Getting started
 
-#### Sanity Checks
-1. can grafana find your plugin? `sudo docker exec gf-dev grafana-cli plugins ls`
-    * if no: probably malformed `plugin.json`
-1. does the output in `./dist/` look right?
-1. is your plugin volume mounted properly? `sudo docker exec gf-dev ls /var/lib/grafana/plugins`
-1. have you tried restarting the docker container? `sudo docker restart gf-dev`
+deps:
 
-#### `prod` branch
-The `prod` branch is special; it contains only the output normally in `/dist`.
-Do not try to merge to this branch as you normally would.
-Instead you must copy a build into it manually.
-Before doing so update the version numbers & changelogs at:
-* ./README.md # Changelog
-* ./package.json : version
-* ./src/plugin.json : version
+```bash
+# mage
+sudo apt install golang-go
+go install github.com/magefile/mage@latets
 
-steps:
-1. build the latest master version into `./dist`
-    * the `watch` task does this automatically; stop it before proceeding.
-1. switch to `prod` branch: `git checkout prod`
-1. merge changes from new build: `cp -R ./dist/* .`
-1. use `git status` & `git add` to stage changes
-1. `git commit` to the `prod` branch
+# docker & docker compose
+# ...
+```
 
-#### Changelog
-##### v0.6.2
-- reformat display date
+### Frontend
 
-##### v0.6.1
-- make request_date table optional
+1. Install dependencies
 
-##### v0.6.0
-- centered image date
-- colorbar key can now be "unified" or "individual"
-- fixes #7
-- data link included under unified colorbar
+   ```bash
+   npm install
+   ```
 
-##### v0.5.0
-- + image date to image title
-- + image date table above images
-- better layout of legend
+2. Build plugin in development mode and run in watch mode
 
-##### v0.4.0
-- automatic time delta using n-images setting (#2)
-- fixes modified this.range side-effect
-- colorbar request now uses middle of this.range
-- data credit links to data request instead of graph
+   ```bash
+   npm run dev
+   ```
 
-##### v0.3.0
-- + custom color bar formatting
-- color bar separated out from images
-- images auto-cropped
+3. Build plugin in production mode
 
-##### v0.2.0
-- + time delta to editor
-- other minor panel editor improvements
+   ```bash
+   npm run build
+   ```
 
-##### v0.1.1
-- fix bugs preventing save & use of configs
+4. Run the tests (using Jest)
 
-##### v0.1.0
-- editor options added to config ERDDAP request(s)
-- color invert replaces zoom effect on img hover
-- img opens in new tab on click
-- first actually working version
+   ```bash
+   # Runs the tests and watches for changes, requires git init first
+   npm run test
 
-##### v0.0.2
-- editor tab added
+   # Exits after running all the tests
+   npm run test:ci
+   ```
 
-##### v0.0.1
-- first "working" version
+5. Spin up a Grafana instance and run the plugin inside it (using Docker)
+
+   ```bash
+   npm run server
+   ```
+
+6. Run the E2E tests (using Cypress)
+
+   ```bash
+   # Spins up a Grafana instance first that we tests against
+   npm run server
+
+   # Starts the tests
+   npm run e2e
+   ```
+
+7. Run the linter
+
+   ```bash
+   npm run lint
+
+   # or
+
+   npm run lint:fix
+   ```
+
+# Distributing your plugin
+
+When distributing a Grafana plugin either within the community or privately the plugin must be signed so the Grafana application can verify its authenticity. This can be done with the `@grafana/sign-plugin` package.
+
+_Note: It's not necessary to sign a plugin during development. The docker development environment that is scaffolded with `@grafana/create-plugin` caters for running the plugin without a signature._
+
+## Initial steps
+
+Before signing a plugin please read the Grafana [plugin publishing and signing criteria](https://grafana.com/legal/plugins/#plugin-publishing-and-signing-criteria) documentation carefully.
+
+`@grafana/create-plugin` has added the necessary commands and workflows to make signing and distributing a plugin via the grafana plugins catalog as straightforward as possible.
+
+Before signing a plugin for the first time please consult the Grafana [plugin signature levels](https://grafana.com/legal/plugins/#what-are-the-different-classifications-of-plugins) documentation to understand the differences between the types of signature level.
+
+1. Create a [Grafana Cloud account](https://grafana.com/signup).
+2. Make sure that the first part of the plugin ID matches the slug of your Grafana Cloud account.
+   - _You can find the plugin ID in the `plugin.json` file inside your plugin directory. For example, if your account slug is `acmecorp`, you need to prefix the plugin ID with `acmecorp-`._
+3. Create a Grafana Cloud API key with the `PluginPublisher` role.
+4. Keep a record of this API key as it will be required for signing a plugin
+
+## Signing a plugin
+
+### Using Github actions release workflow
+
+If the plugin is using the github actions supplied with `@grafana/create-plugin` signing a plugin is included out of the box. The [release workflow](./.github/workflows/release.yml) can prepare everything to make submitting your plugin to Grafana as easy as possible. Before being able to sign the plugin however a secret needs adding to the Github repository.
+
+1. Please navigate to "settings > secrets > actions" within your repo to create secrets.
+2. Click "New repository secret"
+3. Name the secret "GRAFANA_API_KEY"
+4. Paste your Grafana Cloud API key in the Secret field
+5. Click "Add secret"
+
+#### Push a version tag
+
+To trigger the workflow we need to push a version tag to github. This can be achieved with the following steps:
+
+1. Run `npm version <major|minor|patch>`
+2. Run `git push origin main --follow-tags`
+
+## Learn more
+
+Below you can find source code for existing app plugins and other related documentation.
+
+- [Basic panel plugin example](https://github.com/grafana/grafana-plugin-examples/tree/master/examples/panel-basic#readme)
+- [`plugin.json` documentation](https://grafana.com/developers/plugin-tools/reference/plugin-json)
+- [How to sign a plugin?](https://grafana.com/developers/plugin-tools/publish-a-plugin/sign-a-plugin)
