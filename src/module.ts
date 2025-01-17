@@ -38,8 +38,8 @@ const buildUrls = (options: SimpleOptions, timeRange: { from: string; to: string
   const hours = Math.floor((secondsPerStep % 86400) / 3600);
   const minutes = Math.floor((secondsPerStep % 3600) / 60);
   const seconds = secondsPerStep % 60;
-  console.log('Time step between images:', 
-    `${days ? days + 'd ' : ''}${hours ? hours + 'h ' : ''}${minutes ? minutes + 'm ' : ''}${seconds}s`);
+  // console.log('Time step between images:', 
+  //   `${days ? days + 'd ' : ''}${hours ? hours + 'h ' : ''}${minutes ? minutes + 'm ' : ''}${seconds}s`);
 
   // TODO: snap times to valid ERDDAP resolution (from server request)
 
