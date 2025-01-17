@@ -38,8 +38,11 @@ npm run server
 #### Release
 ```bash
 npm version <major|minor|patch>
+#npm run build ???
 git push origin main --follow-tags
 ```
+
+Then go to https://grafana.com/orgs/imars/plugins and submit information from the release.
 
 #### Other commands
 ```bash

@@ -2,12 +2,12 @@
   "$schema": "https://raw.githubusercontent.com/grafana/grafana/main/docs/sources/developers/plugins/plugin.schema.json",
   "type": "panel",
   "name": "Grafana-Erddap",
-  "id": "usfimars-grafanaerddap-panel",
+  "id": "imars-grafanaerddap-panel",
   "info": {
     "keywords": ["panel"],
     "description": "",
     "author": {
-      "name": "Usf i ma rs"
+      "name": "Tylar Murray"
     },
     "logos": {
       "small": "img/logo.svg",
