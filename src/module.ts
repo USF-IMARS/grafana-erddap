@@ -22,16 +22,28 @@ const buildUrls = (options: SimpleOptions, timeRange: { from: string; to: string
     lon_max,
     color_bar_str,
     bg_color,
-    delta,
-    delta_unit,
   } = options;
 
   const urls: ERDDAPURL[] = [];
   const width_est = window.screen.width * 100;
   const t_0 = dateTime(timeRange.from);
   const t_f = dateTime(timeRange.to);
-  let time = t_0;
 
+  // calculate time step in seconds
+  const totalSeconds = t_f.diff(t_0, 'seconds');
+  const secondsPerStep = Math.floor(totalSeconds / (options.n_images - 1));
+
+  // make duration string for console print
+  const hours = Math.floor(secondsPerStep / 3600);
+  const minutes = Math.floor((secondsPerStep % 3600) / 60);
+  const seconds = secondsPerStep % 60;
+  console.log('Time step between images:', 
+    `${hours ? hours + 'h ' : ''}${minutes ? minutes + 'm ' : ''}${seconds}s`);
+
+  // TODO: snap times to valid ERDDAP resolution (from server request)
+
+  // loop through times
+  let time = t_0;
   while (time.isBefore(t_f)) {
     const url = {
       display: getUrl(time, 'Bottom', 'png', `${width_est}|`, {
@@ -64,7 +76,7 @@ const buildUrls = (options: SimpleOptions, timeRange: { from: string; to: string
       throw new Error(`Too many images (> ${MAX_IMAGES})`);
     }
 
-    time = time.add(delta, delta_unit);
+    time = time.add(secondsPerStep, 'seconds');
   }
 
   return urls;
@@ -206,15 +218,15 @@ export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).setPanelOption
       defaultValue: '0xFFFFFFFF',
     })
     .addNumberInput({
-      path: 'delta',
-      name: 'Time Delta',
-      defaultValue: 1,
-    })
-    .addTextInput({
-      path: 'delta_unit',
-      name: 'Time Delta Unit',
-      description: 'Valid units: years, quarters, months, weeks, days, hours, minutes, seconds, milliseconds',
-      defaultValue: 'days',
+      path: 'n_images',
+      name: 'Number of Images',
+      description: 'Number of images to display in the time range',
+      defaultValue: 6,
+      settings: {
+        min: 2,
+        max: 10,
+        integer: true
+      }
     })
     .addBooleanSwitch({
       path: 'show_request_dates',

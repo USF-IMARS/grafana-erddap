@@ -19,63 +19,46 @@ go install github.com/magefile/mage@latets
 
 # docker & docker compose
 # ...
+
+# npm
+npm install
 ```
 
-### Frontend
+### Workflow
 
-1. Install dependencies
+```bash
+# Build plugin in development mode and run in watch mode
+npm run dev
+# Spin up a Grafana instance and run the plugin inside it (using Docker)
+npm run server
+# The plugin is now available at `http://localhost:3000`.
+```
 
-   ```bash
-   npm install
-   ```
+## Other commands
+```bash
+# Build plugin in production mode
+npm run build
 
-2. Build plugin in development mode and run in watch mode
+# Run the tests (using Jest)
+# Runs the tests and watches for changes, requires git init first
+npm run test
 
-   ```bash
-   npm run dev
-   ```
+# Exits after running all the tests
+npm run test:ci
 
-3. Build plugin in production mode
+# === Run the E2E tests (using Cypress)
+# Spins up a Grafana instance first that we tests against
+npm run server
+# Starts the tests
+npm run e2e
 
-   ```bash
-   npm run build
-   ```
+# === Run the linter
+npm run lint
 
-4. Run the tests (using Jest)
+# or
 
-   ```bash
-   # Runs the tests and watches for changes, requires git init first
-   npm run test
-
-   # Exits after running all the tests
-   npm run test:ci
-   ```
-
-5. Spin up a Grafana instance and run the plugin inside it (using Docker)
-
-   ```bash
-   npm run server
-   ```
-
-6. Run the E2E tests (using Cypress)
-
-   ```bash
-   # Spins up a Grafana instance first that we tests against
-   npm run server
-
-   # Starts the tests
-   npm run e2e
-   ```
-
-7. Run the linter
-
-   ```bash
-   npm run lint
-
-   # or
-
-   npm run lint:fix
-   ```
+npm run lint:fix
+```
 
 # Distributing your plugin
 
