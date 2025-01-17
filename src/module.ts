@@ -34,10 +34,10 @@ const buildUrls = (options: SimpleOptions, timeRange: { from: string; to: string
   const secondsPerStep = Math.floor(totalSeconds / (n_images - 1));
 
   // make duration string for console print
-  const days = Math.floor(secondsPerStep / 86400); // 86400 seconds in a day
-  const hours = Math.floor((secondsPerStep % 86400) / 3600);
-  const minutes = Math.floor((secondsPerStep % 3600) / 60);
-  const seconds = secondsPerStep % 60;
+  // const days = Math.floor(secondsPerStep / 86400); // 86400 seconds in a day
+  // const hours = Math.floor((secondsPerStep % 86400) / 3600);
+  // const minutes = Math.floor((secondsPerStep % 3600) / 60);
+  // const seconds = secondsPerStep % 60;
   // console.log('Time step between images:', 
   //   `${days ? days + 'd ' : ''}${hours ? hours + 'h ' : ''}${minutes ? minutes + 'm ' : ''}${seconds}s`);
 
