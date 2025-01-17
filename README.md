@@ -1,12 +1,9 @@
-# Grafana panel plugin template
+## ERDDAP Panel for Grafana
 
-This template is a starting point for building a panel plugin for Grafana.
+![screenshot](https://raw.githubusercontent.com/USF-IMARS/grafana-erddap/main/src/img/screenshot-1.png)
 
-## What are Grafana panel plugins?
+This [grafana](https://grafana.com/) plugin connects to an [ERDDAP](https://coastwatch.pfeg.noaa.gov/erddap/information.html) server display gridded timeseries data in a dashboard panel.
 
-Panel plugins allow you to add new types of visualizations to your dashboard, such as maps, clocks, pie charts, lists, and more.
-
-Use panel plugins when you want to do things like visualize data returned by data source queries, navigate between dashboards, or control external systems (such as smart home devices).
 
 ## Getting started
 

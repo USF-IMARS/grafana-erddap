@@ -5,7 +5,7 @@
   "id": "imars-grafanaerddap-panel",
   "info": {
     "keywords": ["panel"],
-    "description": "",
+    "description": "This grafana plugin connects to an ERDDAP server display gridded timeseries data in a dashboard panel.",
     "author": {
       "name": "Tylar Murray"
     },
@@ -14,7 +14,13 @@
       "large": "img/logo.svg"
     },
     "links": [],
-    "screenshots": [],
+    "screenshots": [
+      {
+        "name": "Panel Example",
+        "path": "img/panel-example.png",
+        "description": "Example of the ERDDAP panel visualization"
+      }
+    ],
     "version": "%VERSION%",
     "updated": "%TODAY%"
   },
