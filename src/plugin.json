@@ -10,15 +10,14 @@
       "name": "Tylar Murray"
     },
     "logos": {
-      "small": "img/logo.svg",
-      "large": "img/logo.svg"
+      "small": "img/logo.png",
+      "large": "img/logo.png"
     },
     "links": [],
     "screenshots": [
       {
         "name": "Panel Example",
-        "path": "img/panel-example.png",
-        "description": "Example of the ERDDAP panel visualization"
+        "path": "img/screenshot1.png"
       }
     ],
     "version": "%VERSION%",
