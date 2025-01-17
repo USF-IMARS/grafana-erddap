@@ -26,6 +26,7 @@ npm install
 
 ### Workflow
 
+#### Development
 ```bash
 # Build plugin in development mode and run in watch mode
 npm run dev
@@ -34,7 +35,13 @@ npm run server
 # The plugin is now available at `http://localhost:3000`.
 ```
 
-## Other commands
+#### Release
+```bash
+npm version <major|minor|patch>
+git push origin main --follow-tags
+```
+
+#### Other commands
 ```bash
 # Build plugin in production mode
 npm run build
