@@ -1,5 +1,5 @@
 This panel requires connection to an ERDDAP server that allows CORS requests.
-For an example ERDDAP configuration see [USF-IMARS/erddap-config](https://github.com/USF-IMARS/erddap-config/).
+For an example ERDDAP configuration see [USF-IMARS/erddap-config](https://github.com/USF-IMARS/erddap-config/) for an example ERDDAP configuration managed with docker-compose.
 An example of the required CORS setting is [here](https://github.com/USF-IMARS/erddap-config/blob/44ca9cb54d8e65b8068ddcf2994642ebad0fe2f7/web.xml#L39-L42).
 
 Many ERDDAP servers are available with public data, but most will not allow CORS.
