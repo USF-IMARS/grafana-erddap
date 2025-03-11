@@ -1,0 +1,45 @@
+---
+version: '3.3'
+
+services:
+  erddap:
+    container_name: usfimars-grafana-erddap
+    #user: 0:4504  # root:imars-common
+    #restart: unless-stopped
+    ports:
+      - 8080:8080
+    #environment:
+    #  - ERDDAP_MEMORY=4G  # default is 4G
+    image: axiom/docker-erddap:latest-jdk21-openjdk
+    volumes:
+      - erddap-data-volume:/erddapData
+      - '.:/usr/local/tomcat/content/erddap'
+      - './web.xml:/usr/local/tomcat/conf/web.xml'
+      - './messages.xml:/usr/local/tomcat/webapps/erddap/WEB-INF/classes/gov/noaa/pfel/erddap/util/messages.xml'
+  grafana:
+    user: root
+    container_name: 'usfimars-grafana-erddap-panel'
+    build:
+      context: ../.config
+      args:
+        grafana_image: ${GRAFANA_IMAGE:-grafana-enterprise}
+        grafana_version: ${GRAFANA_VERSION:-11.3.2}
+        development: ${DEVELOPMENT:-false}
+        anonymous_auth_enabled: ${ANONYMOUS_AUTH_ENABLED:-true}
+    ports:
+      - 3000:3000/tcp
+    volumes:
+      - '../dist:/var/lib/grafana/plugins/usfimars-grafanaerddap-panel'
+      - '.:/etc/grafana/provisioning'
+      - '.:/root/usfimars-grafanaerddap-panel'
+
+    environment:
+      NODE_ENV: development
+      GF_LOG_FILTERS: plugin.usfimars-grafanaerddap-panel:debug
+      GF_LOG_LEVEL: debug
+      GF_DATAPROXY_LOGGING: 1
+      GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS: usfimars-grafanaerddap-panel
+      GF_SECURITY_ADMIN_USER: grafana
+      GF_SECURITY_ADMIN_PASSWORD: grafana
+volumes:
+  erddap-data-volume:
