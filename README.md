@@ -1,4 +1,8 @@
 ## ERDDAP Panel for Grafana
+![GitHub CI](https://github.com/usf-imars/grafana-erddap/actions/workflows/ci.yml/badge.svg)
+<!-- TODO: grafana badge
+![Dynamic JSON Badge](https://img.shields.io/badge/dynamic/json?logo=grafana&query=$.version&url=https://grafana.com/api/plugins/grafana-polystat-panel&label=Marketplace&prefix=v&color=F47A20)
+--> 
 
 ![screenshot](https://raw.githubusercontent.com/USF-IMARS/grafana-erddap/angular-deprecated/src/img/screenshot-1.png)
 
@@ -65,6 +69,10 @@ npm run lint
 
 npm run lint:fix
 ```
+
+### Contributing
+Contributions are welcome!
+Please start by opening an issue to discuss your idea.
 
 # Distributing your plugin
 
