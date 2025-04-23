@@ -8,7 +8,6 @@ interface ERDDAPURL {
   request_time: string;
 }
 
-const MAX_IMAGES = 30;
 const dt_display_fmt = 'Do MMM YYYY';
 
 const buildUrls = (options: SimpleOptions, timeRange: { from: string; to: string }): ERDDAPURL[] => {
@@ -29,23 +28,18 @@ const buildUrls = (options: SimpleOptions, timeRange: { from: string; to: string
   const t_0 = dateTime(timeRange.from);
   const t_f = dateTime(timeRange.to);
 
-  // calculate time step in seconds
+  // calculate total time range in seconds
   const totalSeconds = t_f.diff(t_0, 'seconds');
-  const secondsPerStep = Math.floor(totalSeconds / (n_images - 1));
 
-  // make duration string for console print
-  // const days = Math.floor(secondsPerStep / 86400); // 86400 seconds in a day
-  // const hours = Math.floor((secondsPerStep % 86400) / 3600);
-  // const minutes = Math.floor((secondsPerStep % 3600) / 60);
-  // const seconds = secondsPerStep % 60;
-  // console.log('Time step between images:', 
-  //   `${days ? days + 'd ' : ''}${hours ? hours + 'h ' : ''}${minutes ? minutes + 'm ' : ''}${seconds}s`);
+  // Instead of a time-based while loop, use a for loop to ensure exactly n_images are created
+  for (let i = 0; i < n_images; i++) {
+    // Calculate the fraction of the way through the time range (0 to 1)
+    const fraction = n_images > 1 ? i / (n_images - 1) : 0;
+    
+    // Calculate the exact time for this image
+    const secondsOffset = totalSeconds * fraction;
+    const time = t_0.add(secondsOffset, 'seconds');
 
-  // TODO: snap times to valid ERDDAP resolution (from server request)
-
-  // loop through times
-  let time = t_0;
-  while (time.isBefore(t_f)) {
     const url = {
       display: getUrl(time, 'Bottom', 'png', '|', {
         base_url,
@@ -72,12 +66,6 @@ const buildUrls = (options: SimpleOptions, timeRange: { from: string; to: string
       request_time: time.format(dt_display_fmt),
     };
     urls.push(url);
-
-    if (urls.length > MAX_IMAGES) {
-      throw new Error(`Too many images (> ${MAX_IMAGES})`);
-    }
-
-    time = time.add(secondsPerStep, 'seconds');
   }
 
   return urls;
