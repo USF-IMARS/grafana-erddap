@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { PanelPlugin, PanelProps, dateTime, DateTime } from '@grafana/data';
 import { SimpleOptions } from './types';
 import { css } from '@emotion/css';
+import { HorizontalGroup, VerticalGroup } from '@grafana/ui';
 
 interface ERDDAPURL {
   display: string;
@@ -177,87 +178,69 @@ export const SimplePanel = ({ options, timeRange, width, height }: PanelProps<Si
     }));
   };
 
-  return React.createElement(
-    'div',
-    { 
-      style: { 
-        width, 
-        height, 
+  // Define a style for each image container
+  const imageContainerStyle = css`
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  `;
+
+  return (
+    <div
+      style={{
+        width,
+        height,
         overflowY: 'auto',
-        display: 'flex',
-        flexDirection: 'column',
-      } 
-    },
-    React.createElement(
-      'div',
-      {
-        style: {
-          display: 'flex',
-          flexDirection: 'row',
-          gap: '10px',
-          alignItems: 'center',
-          flexGrow: 1,
-        }
-      },
-      urls.map((url, index) =>
-        React.createElement(
-          'div',
-          { 
-            key: index,
-            style: {
-              flex: '1 1 0',
-              minWidth: 0,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              height: '100%',
-            }
-          },
-          loadedImages[index] ? 
-            React.createElement(
-              'a',
-              { href: url.link, target: '_blank', rel: 'noopener noreferrer' },
-              React.createElement('img', {
-                src: url.display,
-                alt: url.request_time,
-                style: { 
-                  width: '100%',
-                  height: 'auto',
-                  maxWidth: imageWidth
-                },
-              })
-            ) : 
-            React.createElement(
-              'div',
-              {
-                className: loadingContainerStyle,
-                style: {
+      }}
+    >
+      <HorizontalGroup spacing="sm" justify="space-between" align="center">
+        {urls.map((url, index) => (
+          <div key={index} className={imageContainerStyle}>
+            {loadedImages[index] ? (
+              <VerticalGroup spacing="xs" align="center">
+                <a href={url.link} target="_blank" rel="noopener noreferrer">
+                  <img
+                    src={url.display}
+                    alt={url.request_time}
+                    style={{ 
+                      width: '100%',
+                      height: 'auto',
+                      maxWidth: imageWidth
+                    }}
+                  />
+                </a>
+                {options.show_request_dates && <p>{url.request_time}</p>}
+              </VerticalGroup>
+            ) : (
+              <div
+                className={loadingContainerStyle}
+                style={{
                   width: '100%',
                   maxWidth: imageWidth,
-                }
-              },
-              React.createElement('div', { className: spinnerStyle }),
-              React.createElement(
-                'div',
-                { className: loadingTextStyle },
-                `Loading: ${url.request_time}`
-              ),
-              // Hidden image that loads in the background
-              React.createElement('img', {
-                src: url.display,
-                alt: url.request_time,
-                style: { 
-                  display: 'none',
-                },
-                onLoad: () => handleImageLoad(index),
-                onError: () => handleImageLoad(index), // Also handle errors to avoid stuck loading state
-              })
-            ),
-          options.show_request_dates && loadedImages[index] && React.createElement('p', null, url.request_time)
-        )
-      )
-    )
+                }}
+              >
+                <div className={spinnerStyle} />
+                <div className={loadingTextStyle}>
+                  Loading: {url.request_time}
+                </div>
+                {/* Hidden image that loads in the background */}
+                <img
+                  src={url.display}
+                  alt={url.request_time}
+                  style={{ display: 'none' }}
+                  onLoad={() => handleImageLoad(index)}
+                  onError={() => handleImageLoad(index)} // Also handle errors to avoid stuck loading state
+                />
+              </div>
+            )}
+          </div>
+        ))}
+      </HorizontalGroup>
+    </div>
   );
 };
 
