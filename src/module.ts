@@ -57,7 +57,6 @@ const buildUrls = (options: SimpleOptions, timeRange: { from: string; to: string
     lon_min,
     lon_max,
     color_bar_str,
-    bg_color,
     n_images,
   } = options;
 
@@ -87,7 +86,6 @@ const buildUrls = (options: SimpleOptions, timeRange: { from: string; to: string
         lon_min,
         lon_max,
         color_bar_str,
-        bg_color,
       }),
       link: getUrl(time, 'Bottom', 'largePng', '|', {
         base_url,
@@ -98,7 +96,6 @@ const buildUrls = (options: SimpleOptions, timeRange: { from: string; to: string
         lon_min,
         lon_max,
         color_bar_str,
-        bg_color,
       }),
       request_time: time.format(dt_display_fmt),
     };
@@ -122,10 +119,9 @@ const getUrl = (
     lon_min: number;
     lon_max: number;
     color_bar_str: string;
-    bg_color: string;
   }
 ): string => {
-  const { base_url, product_id, variable_id, lat_min, lat_max, lon_min, lon_max, color_bar_str, bg_color } = options;
+  const { base_url, product_id, variable_id, lat_min, lat_max, lon_min, lon_max, color_bar_str } = options;
 
   let constructed_url = `${base_url}/griddap/${product_id}.${format}`;
   constructed_url += `?${variable_id}`;
@@ -139,7 +135,6 @@ const getUrl = (
       '.draw': 'surface',
       '.vars': `longitude|latitude|${variable_id}`,
       '.colorBar': color_bar_str,
-      '.bgColor': bg_color,
       '.trim': '1',
       '.legend': legend,
       '.size': sizeStr,
@@ -308,11 +303,6 @@ export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).setPanelOption
       path: 'color_bar_str',
       name: 'Color Bar String',
       defaultValue: 'Rainbow|C|Linear|0|30|',
-    })
-    .addTextInput({
-      path: 'bg_color',
-      name: 'Background Color',
-      defaultValue: '0xFFFFFFFF',
     })
     .addNumberInput({
       path: 'n_images',
