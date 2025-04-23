@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { PanelPlugin, PanelProps, dateTime, DateTime } from '@grafana/data';
 import { SimpleOptions } from './types';
+import { LoadingBar } from '@grafana/ui';
 
 interface ERDDAPURL {
   display: string;
@@ -119,9 +120,13 @@ const encodeData = (data: Record<string, string>): string => {
 
 export const SimplePanel = ({ options, timeRange, width, height }: PanelProps<SimpleOptions>) => {
   const [urls, setUrls] = useState<ERDDAPURL[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [loadedImages, setLoadedImages] = useState<number>(0);
 
   useEffect(() => {
     try {
+      setLoading(true);
+      setLoadedImages(0);
       const builtUrls = buildUrls(options, {
         from: timeRange.from.toISOString(),
         to: timeRange.to.toISOString(),
@@ -135,6 +140,20 @@ export const SimplePanel = ({ options, timeRange, width, height }: PanelProps<Si
   // Calculate image width based on panel width and number of images
   const imageWidth = Math.floor((width - (options.n_images - 1) * 10) / options.n_images); // 10px gap between images
 
+  // Handler for when an image loads
+  const handleImageLoad = () => {
+    setLoadedImages(prev => {
+      const newCount = prev + 1;
+      if (newCount >= urls.length && urls.length > 0) {
+        setLoading(false);
+      }
+      return newCount;
+    });
+  };
+
+  // Calculate loading progress percentage
+  const loadingPercentage = urls.length > 0 ? loadedImages / urls.length : 0;
+
   return React.createElement(
     'div',
     { 
@@ -143,38 +162,82 @@ export const SimplePanel = ({ options, timeRange, width, height }: PanelProps<Si
         height, 
         overflowY: 'auto',
         display: 'flex',
-        flexDirection: 'row',
-        gap: '10px',
-        alignItems: 'center'
+        flexDirection: 'column',
       } 
     },
-    urls.map((url, index) =>
+    loading && React.createElement(
+      'div',
+      {
+        style: {
+          padding: '10px 0',
+          width: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }
+      },
       React.createElement(
         'div',
-        { 
-          key: index,
+        {
           style: {
-            flex: '1 1 0',
-            minWidth: 0,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center'
+            width: Math.min(400, width - 40),
+            marginBottom: '10px',
           }
         },
+        React.createElement(LoadingBar, { width: Math.min(400, width - 40) })
+      ),
+      React.createElement(
+        'div',
+        {
+          style: {
+            fontSize: '12px',
+          }
+        },
+        `Loading images: ${loadedImages}/${urls.length} (${Math.round(loadingPercentage * 100)}%)`
+      )
+    ),
+    React.createElement(
+      'div',
+      {
+        style: {
+          display: 'flex',
+          flexDirection: 'row',
+          gap: '10px',
+          alignItems: 'center',
+          flexGrow: 1,
+        }
+      },
+      urls.map((url, index) =>
         React.createElement(
-          'a',
-          { href: url.link, target: '_blank', rel: 'noopener noreferrer' },
-          React.createElement('img', {
-            src: url.display,
-            alt: url.request_time,
-            style: { 
-              width: '100%',
-              height: 'auto',
-              maxWidth: imageWidth
-            },
-          })
-        ),
-        options.show_request_dates && React.createElement('p', null, url.request_time)
+          'div',
+          { 
+            key: index,
+            style: {
+              flex: '1 1 0',
+              minWidth: 0,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center'
+            }
+          },
+          React.createElement(
+            'a',
+            { href: url.link, target: '_blank', rel: 'noopener noreferrer' },
+            React.createElement('img', {
+              src: url.display,
+              alt: url.request_time,
+              style: { 
+                width: '100%',
+                height: 'auto',
+                maxWidth: imageWidth
+              },
+              onLoad: handleImageLoad,
+              onError: handleImageLoad, // Also count errors to avoid stuck loading state
+            })
+          ),
+          options.show_request_dates && React.createElement('p', null, url.request_time)
+        )
       )
     )
   );
