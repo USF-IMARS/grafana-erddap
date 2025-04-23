@@ -35,5 +35,7 @@ ci/
 
 # Editor
 .idea
-
 .eslintcache
+
+# ubuntu backups
+*~
