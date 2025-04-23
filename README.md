@@ -112,6 +112,7 @@ To trigger the workflow we need to push a version tag to github. This can be ach
 
 1. Run `npm version <major|minor|patch>`
 2. Run `git push origin main --follow-tags`
+3. create the release in the GitHub GUI
 
 ## Learn more
 
