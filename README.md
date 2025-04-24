@@ -96,15 +96,10 @@ Before signing a plugin for the first time please consult the Grafana [plugin si
 
 ## Signing a plugin
 
-### Using Github actions release workflow
+### Github actions release workflow
 
-If the plugin is using the github actions supplied with `@grafana/create-plugin` signing a plugin is included out of the box. The [release workflow](./.github/workflows/release.yml) can prepare everything to make submitting your plugin to Grafana as easy as possible. Before being able to sign the plugin however a secret needs adding to the Github repository.
-
-1. Please navigate to "settings > secrets > actions" within your repo to create secrets.
-2. Click "New repository secret"
-3. Name the secret "GRAFANA_API_KEY"
-4. Paste your Grafana Cloud API key in the Secret field
-5. Click "Add secret"
+The plugin is using the github actions supplied with `@grafana/create-plugin` so signing a plugin is included out of the box. The release workflow at `github/workflows/release.yml` prepares everything to make submitting your plugin to Grafana easy.
+A secret "GRAFANA_API_KEY" is included in the repo settings to enable signing.
 
 #### Push a version tag
 
